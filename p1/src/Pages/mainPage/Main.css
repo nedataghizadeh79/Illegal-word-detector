@@ -1,0 +1,36 @@
+.main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.mainPic {
+    width: 45vw;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.inputs{
+    margin: 30px;
+}
+
+.searcButton{
+    margin-right: 20px;
+    width: 100px;
+    height: 45px;
+    background-color: #EAF3FA;
+    cursor: pointer;
+    font-size: larger;
+    border: solid 2px #CCE0FB;
+    margin-top: 5px;
+}
+
+
+.inputElement{
+    width: 800px;
+    height: 40px;
+    border: solid 2px #CCE0FB;
+}
