@@ -1,0 +1,20 @@
+# Test your FastAPI endpoints
+
+POST http://localhost:8080/run
+Content-Type: application/json
+
+{
+  "illegal_words": [
+    "تفنگ",
+     "سیر",
+     "سیرجان",
+     "بی ادب",
+     "بی‌تربیت",
+     "چنگال",
+     "ترشی",
+     "سرما"
+  ],
+  "text" : "سلام الاغ عزیز، حالت چطوره؟ خوب و خوش و سلامتی، بارت چطوره؟"
+}
+
+###
