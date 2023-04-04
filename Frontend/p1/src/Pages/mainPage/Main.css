@@ -1,37 +1,120 @@
 .main {
+    box-sizing: border-box;
+    background-color: #e5eefc;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    margin: 0;
 }
 
-.mainPic {
-    width: 45vw;
-    height: 100vh;
+.cotainer{    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 10px;
     display: flex;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
 }
 
-.inputs{
-    margin: 30px;
+.firstPart{
+    margin-top: 30px;
+    width: 90%;
+    border: none;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 2px 2px 4px #919191;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
+.pic{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40vw;
+    height: 50vh;
+    padding-left: 10px;
+    border-radius: 30px;
+}
 
-.searcButton{
-    margin-right: 20px;
-    width: 100px;
-    height: 45px;
-    background-color: #EAF3FA;
+.secondPart{
+    margin-top: 55px;
+}
+
+.pRightSide{
+    color: #2B468B;
+    margin-right: 10px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.labelInput{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size:25px;
+    color: #2B468B;
+    margin-bottom: 5px;
+}
+
+.illegalInput{
+    width: 70%;
+    height: 42px ;
+    margin-top: -2px;
+    border: none;
+    box-shadow: 2px 2px 4px #919191;
+    border-radius: 20px;
+    margin-bottom: 3px;
+}
+
+.explanation{
+    margin-top: -0px;
+    color: #3b84f3;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.textLabel{
+    color: #2B468B;
+    gap: 5px;
+    font-size:25px;
+}
+
+.textareaSection{
+    display: flex;
+    flex-direction: column;
+    margin-top: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 80px;
+}
+
+.ta{
+    box-shadow: 2px 2px 4px #919191;
+    border-radius: 30px;
+    border: none;
+    height: 150px;
+    width: 70%;
+}
+
+.submitBtn{
+    margin-top: 30px;
+    width: 200px;
+    height: 50px;
+    border: none;
+    color: #2B468B;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: larger;
-    border: solid 2px #CCE0FB;
-    margin-top: 5px;
-}
-
-
-.inputElement{
-    width: 800px;
-    height: 40px;
-    border: solid 2px #CCE0FB;
+    color: #ffffff;
+    background-color: #fff;
+    background-color: #2B468B;
 }

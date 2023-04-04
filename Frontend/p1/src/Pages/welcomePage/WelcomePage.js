@@ -9,7 +9,7 @@ const WelcomePage = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setDisplay(false)
-        }, 1000)
+        }, 10)
     }, [])
 
     return (
