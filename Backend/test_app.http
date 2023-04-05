@@ -1,6 +1,6 @@
 # Test your FastAPI endpoints
 
-POST http://localhost:8080/run
+POST http://localhost:8000/run
 Content-Type: application/json
 
 {
@@ -9,10 +9,7 @@ Content-Type: application/json
      "سیر",
      "سیرجان",
      "بی ادب",
-     "بی‌تربیت",
-     "چنگال",
-     "ترشی",
-     "سرما"
+     "بی‌تربیت"
   ],
   "text" : "سلام الاغ عزیز، حالت چطوره؟ خوب و خوش و سلامتی، بارت چطوره؟"
 }

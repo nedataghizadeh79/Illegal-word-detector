@@ -5,6 +5,7 @@ import regex
 import re
 
 ILLEGAL_EDIT_DISTANCE_THRESHOLD = 3
+ACCEPTABLE_PERSIAN_CHARS_REGEX = r'[^\u0621-\u064A|\u0686|\u0698|\u06A9|\u06af|\u06be|\u06c1|\u06c3]'
 
 
 def get_persian_words_dictionary():
@@ -26,6 +27,9 @@ def get_persian_words_dictionary():
 
     return persian_words
 
+def get_persian_similar_characters():
+    # with open()
+    pass
 
 def hazm_normalize(raw_string):
     normalizer = hazm.Normalizer()
@@ -74,13 +78,22 @@ def detect_bad_formed_words(word_list: list[str], illegal_words: list[str]) -> l
 
 def edit_distance(s1, s2):
     def insertion_cost(char):
-        return 1.0
+        if re.match(ACCEPTABLE_PERSIAN_CHARS_REGEX, char):
+            return 2.0
+        return 0.1
 
     def deletion_cost(char):
-        return 1.0
+        if re.match(ACCEPTABLE_PERSIAN_CHARS_REGEX, char):
+            return 2.0
+        return 0.1
 
     def substitution_cost(char_a, char_b):
-        return 1.0
+        cost = 0.1
+        if re.match(ACCEPTABLE_PERSIAN_CHARS_REGEX, char_a):
+            cost += 2.0
+        if re.match(ACCEPTABLE_PERSIAN_CHARS_REGEX, char_b):
+            cost += 2.0
+        return cost
 
     weighted_levenshtein = WeightedLevenshtein(
         substitution_cost_fn=substitution_cost,
