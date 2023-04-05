@@ -4,30 +4,38 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Box from "@mui/material/Box";
 
-export default function InputChips() {
+export default function InputChips({setSaveIllegals}) {
     const [inputValue, setInputValue] = useState('');
+    const [allInputValue, setAllInputValue] = useState([]);
     const [chips, setChips] = useState([]);
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
+    console.log(allInputValue)
 
     const handleInputKeyDown = (event) => {
-        if (event.key === 'Enter' || event.key === ',') {
+        if (event.key === 'Enter') {
             event.preventDefault();
-
             const value = inputValue.trim();
-
+            setAllInputValue([...allInputValue, value]);
             if (value) {
-                setChips([...chips, {label: value}]);
+                const newChips = value.split(',').map((val) => ({ label: val.trim() }));
+                setChips([...chips, ...newChips]);
             }
-
+            setSaveIllegals(allInputValue)
             setInputValue('');
         }
     };
 
+
     const handleChipDelete = (chipToDelete) => () => {
-        setChips((chips) => chips.filter((chip) => chip !== chipToDelete));
+        const chipIndex = allInputValue.findIndex((chip) => chip === chipToDelete);
+        const newChips = [...allInputValue];
+        newChips.splice(chipIndex, 1);
+        setAllInputValue(newChips);
+        const updatedChips = chips.filter((chip) => chip !== chipToDelete);
+        setChips(updatedChips);
     };
 
     return (
@@ -43,13 +51,13 @@ export default function InputChips() {
                         marginBottom:"60px",
                         marginTop:"20px"
                     }}
-                    label="کلمات غیرقانونی مد نظر را با ویرگول جداسازی کنید"
+                    label="کلمات غیرقانونی را یکی یکی وارد نمایید"
                     value={inputValue}
                     onChange={handleInputChange}
                     onKeyDown={handleInputKeyDown}
                     InputLabelProps={{
                         sx: {
-                            direction:"rtl",  textAlign: 'center'
+                            direction:"rtl",  textAlign: 'center' , padding:"5px"
                         }
                     }}
                 />

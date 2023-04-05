@@ -4,7 +4,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Navbar from "../navbar/navbar";
 import Main from "../../Pages/mainPage/Main";
 import UploadPDF from "../pdfReader/pfdUploader";
 
@@ -41,7 +40,7 @@ function a11yProps(index) {
     };
 }
 
-export default function BasicTabs() {
+export default function BasicTabs({saveIllegals}) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -57,7 +56,7 @@ export default function BasicTabs() {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <Main/>
+                <Main saveIllegals={saveIllegals} />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <UploadPDF/>
