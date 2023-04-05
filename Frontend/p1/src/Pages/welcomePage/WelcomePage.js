@@ -1,12 +1,12 @@
 import './WelcomePage.css' ;
 import {useEffect, useState} from "react";
-import Main from "../mainPage/Main";
 import Navbar from "../../compunent/navbar/navbar";
 import TabPanel from '../../compunent/tabs/tab'
 import IllegalWordsInput from "../../compunent/getIllegalWords/illegalWordsInput";
 
 const WelcomePage = () => {
     const [display, setDisplay] = useState(true)
+    const [saveIllegals , setSaveIllegals ] = useState([])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -18,13 +18,12 @@ const WelcomePage = () => {
         <div>
             {
                 display ? <section className='welcomePage'>
-                </section> :
+                    </section> :
                     <div className='divContainer'>
-                            <Navbar/>
-                        <IllegalWordsInput/>
-                        <TabPanel/>
+                        <Navbar/>
+                        <IllegalWordsInput setSaveIllegals ={setSaveIllegals}/>
+                        <TabPanel saveIllegals={saveIllegals}/>
                     </div>
-
 
             }
         </div>
