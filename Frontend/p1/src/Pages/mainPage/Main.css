@@ -8,12 +8,10 @@
     margin: 0;
 }
 
-.cotainer{    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin-top: 10px;
+.cotainer{
     display: flex;
     align-items: center;
+    margin-top: 10px;
     justify-content: center;
 }
 
@@ -44,7 +42,6 @@
 }
 
 .pRightSide{
-    padding-right: 10px;
     color: #2B468B;
     margin-right: 10px;
     text-align: center;

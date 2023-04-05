@@ -1,7 +1,9 @@
 import './WelcomePage.css' ;
 import {useEffect, useState} from "react";
 import Main from "../mainPage/Main";
-
+import Navbar from "../../compunent/navbar/navbar";
+import TabPanel from '../../compunent/tabs/tab'
+import IllegalWordsInput from "../../compunent/getIllegalWords/illegalWordsInput";
 
 const WelcomePage = () => {
     const [display, setDisplay] = useState(true)
@@ -16,7 +18,14 @@ const WelcomePage = () => {
         <div>
             {
                 display ? <section className='welcomePage'>
-                </section> : <Main/>
+                </section> :
+                    <div className='divContainer'>
+                            <Navbar/>
+                        <IllegalWordsInput/>
+                        <TabPanel/>
+                    </div>
+
+
             }
         </div>
     )

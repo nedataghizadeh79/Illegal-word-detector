@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import './pdfUploader.css'
+import IllegalWordsInput from "../getIllegalWords/illegalWordsInput";
 
 function UploadPDF() {
     const [file, setFile] = useState(null);
@@ -28,7 +29,6 @@ function UploadPDF() {
             });
     };
 
-
     return (
         <div className='inputFileDiv'>
         <form className='form' onSubmit={handleSubmit}>
@@ -41,3 +41,4 @@ function UploadPDF() {
 }
 
 export default UploadPDF;
+
