@@ -1,6 +1,7 @@
 import './Main.css'
 import {useState} from "react";
 import mainPagePic from '../../assets/pictures/mainPic.jpg'
+import UploadPDF from "../../compunent/pfdUploader";
 
 const Main = () => {
     const [firstInput , setFirstInput] = useState('')
@@ -47,7 +48,7 @@ const Main = () => {
                 <button className='submitBtn'>پردازش</button>
             </section>
 
-
+            <UploadPDF/>
 
         </div>
     )

@@ -1,0 +1,49 @@
+.inputFileDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.form{
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+     margin-bottom: 200px;
+    margin-top: 30px;
+    box-shadow: 2px 2px 4px #919191;
+    border-radius: 5px;
+    width: 70%;
+    height: 180px;
+    gap: 20px;
+}
+
+.submitButtun{
+    background-color: #2B468B;
+    color: white;
+    border-radius: 5px;
+    width: 10%;
+    height: 40px;
+    border: none;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.uploadLabel{
+    font-weight: bold;
+    font-size: 20px;
+    color: #2B468B;
+}
+
+
+.custom-file-upload {
+    border: none;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    color: #2877ee;
+     border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
