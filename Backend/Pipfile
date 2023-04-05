@@ -7,6 +7,9 @@ name = "pypi"
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 pylint = "*"
+strsimpy = "*"
+hazm = "*"
+regex = "*"
 
 [dev-packages]
 
