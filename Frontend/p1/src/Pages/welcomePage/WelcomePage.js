@@ -24,7 +24,6 @@ const WelcomePage = () => {
                         <IllegalWordsInput setSaveIllegals ={setSaveIllegals}/>
                         <TabPanel saveIllegals={saveIllegals}/>
                     </div>
-
             }
         </div>
     )

@@ -115,3 +115,10 @@
     color: #ffffff;
     background-color: #2B468B;
 }
+
+.showRedText{
+    margin-top: 35px;
+    margin-bottom: 50px;
+    font-weight: bold;
+    font-size: 22px;
+}

@@ -33,7 +33,7 @@ function UploadPDF() {
         <div className='inputFileDiv'>
         <form className='form' onSubmit={handleSubmit}>
                 <label className='uploadLabel' htmlFor="pdf-upload"> لطفا پی دی اف خود را جهت تصحیح بارگزاری کنید</label>
-                <input className='custom-file-upload'   type="file" id="pdf-upload" onChange={handleFileChange} />
+                <input className='custom-file-upload' type="file" id="pdf-upload" onChange={handleFileChange} />
                 <button className='submitButtun' type="submit"> بارگذاری  </button>
         </form>
         </div>

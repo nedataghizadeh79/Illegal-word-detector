@@ -38,7 +38,6 @@
     color: #2B468B;
  }
 
-
 .custom-file-upload {
     border: none;
     display: inline-block;
@@ -46,6 +45,6 @@
     cursor: pointer;
     color: #2877ee;
      border-radius: 5px;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
 }
