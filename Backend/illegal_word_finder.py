@@ -63,7 +63,7 @@ def tokenize(normal_string):
     return word_list
 
 
-def get_illegal_regex_from_words(illegal_words_list: list[str]) -> list[str]:
+def get_illegal_regex_from_words(illegal_words_list: List[str]) -> List[str]:
     word_regex_list = []
     non_persian_characters_regex = '[^\u0600-\u06FF]*'
     for illegal in illegal_words_list:
@@ -153,8 +153,7 @@ def make_integrated_string(input_string):
     return integrated_string, integrated_spans
 
 
-def detect_bad_formed_integrated(integrated_string: str, integrated_spans, illegal_words: list[str]) -> list[
-    (str, str, (int, int))]:
+def detect_bad_formed_integrated(integrated_string: str, integrated_spans, illegal_words: List[str]): #-> List[(str, str, (int, int))]:
     dubiouses = []  # format --> [(illegal, found, (start, end))]
     illegal_regexes = get_illegal_regex_from_words(illegal_words)
 
@@ -171,7 +170,7 @@ def detect_bad_formed_integrated(integrated_string: str, integrated_spans, illeg
     return dubiouses
 
 
-def get_illegal_regex_for_integrated(illegal_words_list: list[str]) -> list[str]:
+def get_illegal_regex_for_integrated(illegal_words_list: List[str]) -> List[str]:
     word_regex_list = []
     for illegal in illegal_words_list:
         word_regex = '+'.join(illegal) + '+'
@@ -261,8 +260,8 @@ def run_tests():
 
 
 if __name__ == '__main__':
-    # run_tests()
+    run_tests()
     # print(get_persian_similar_characters())
-    print(edit_distance("آقا", "آبا"))
+    # print(edit_distance("آقا", "آبا"))
     # print(re.match(ACCEPTABLE_PERSIAN_CHARS_REGEX, "!"))
     # print(ACCEPTABLE_PERSIAN_CHARS_REGEX)
