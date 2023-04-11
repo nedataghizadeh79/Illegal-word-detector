@@ -7,7 +7,7 @@ import yaml
 
 ILLEGAL_EDIT_DISTANCE_THRESHOLD = 3
 NON_PERSIAN_CHARS_REGEX = r'[^\u0621-\u064A|\u0686|\u0698|\u06A9|\u06af|\u06be|\u06c1|\u06c3]'
-
+VALID_PERSIAN_CHARS_REGEX = r'[\u0600-\u06FF\s]'
 
 def get_persian_words_dictionary():
     base_address = "assets/dictionaries"
