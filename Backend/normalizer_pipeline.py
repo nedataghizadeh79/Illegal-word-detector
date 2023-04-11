@@ -1,7 +1,7 @@
 from typing import List
 import re
 
-from illegal_word_finder import tokenize, hazm_normalize, VALID_PERSIAN_CHARS_REGEX
+from tools import tokenize, hazm_normalize, VALID_PERSIAN_CHARS_REGEX
 
 
 def custom_simplifier(tokens: List[str]):

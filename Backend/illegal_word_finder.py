@@ -1,66 +1,10 @@
-from typing import List
-import hazm
-from strsimpy.weighted_levenshtein import WeightedLevenshtein
-import regex
 import re
-import yaml
+from typing import List
+from strsimpy import WeightedLevenshtein
+
+import tools
 
 ILLEGAL_EDIT_DISTANCE_THRESHOLD = 3
-NON_PERSIAN_CHARS_REGEX = r'[^\u0621-\u064A|\u0686|\u0698|\u06A9|\u06af|\u06be|\u06c1|\u06c3]'
-VALID_PERSIAN_CHARS_REGEX = r'[\u0600-\u06FF\s]'
-
-def get_persian_words_dictionary():
-    base_address = "assets/dictionaries"
-    persian_words = set()
-
-    with open(f'{base_address}/distinct_words.txt', encoding='utf-8') as f:  # 453158
-        persian_words.update([x.strip() for x in f.readlines()])
-    with open(f'{base_address}/word_collection_1.txt', encoding='utf-8') as f:  # 331792
-        persian_words.update([x.strip() for x in f.readlines()])
-    with open(f'{base_address}/words_with_bad_english.txt', encoding='utf-8') as f:  # 103923
-        persian_words.update([x.split('/')[0].strip() for x in f.readlines()[1:]])
-    with open(f'{base_address}/persian_verbs_list.txt', encoding='utf-8') as f:  # 32325
-        persian_words.update([x.strip() for x in f.readlines()])
-    with open(f'{base_address}/moin_key_words.txt', encoding='utf-8') as f:  # 25527
-        persian_words.update([x.strip() for x in f.readlines()])
-    with open(f'{base_address}/farhang_motaradef_motazad.txt', encoding='utf-8') as f:  # 19897
-        persian_words.update([x.split(":")[0].strip() for x in f.readlines()[1:]])
-
-    return persian_words
-
-
-def get_persian_similar_characters():
-    with open("assets/similar_persian_chars.yml", 'r') as f:
-        chars_lists = yaml.safe_load(f)
-        indices = {}
-
-        for i, group in enumerate(chars_lists):
-            for city in group:
-                indices.setdefault(city, set()).add(i)
-
-
-def common_groups(city1, city2, indices: dict):
-    return indices.get(city1, set()) & indices.get(city2, set())
-
-
-def hazm_normalize(word_list):
-    normalizer = hazm.Normalizer()
-    normal_word_list = []
-    for word in word_list:
-        normal_word_list.append((normalizer.normalize(word[0]), word[1]))
-    return normal_word_list
-
-
-def tokenize(normal_string):
-    working_string1 = ' ' + normal_string + ' '
-    tokenize_regex = r'[\s]([\S]+)[\s]'
-    tokenize_match = regex.finditer(tokenize_regex, working_string1, overlapped=True)
-    word_list = []
-    for match_object in tokenize_match:
-        word_list.append(
-            (match_object.group(1), (match_object.start(1) - 1, match_object.end(1) - 1))
-        )
-    return word_list
 
 
 def get_illegal_regex_from_words(illegal_words_list: List[str]) -> List[str]:
@@ -92,20 +36,20 @@ def detect_bad_formed_words(word_list: list, illegal_words: list) -> list:  # [(
 
 def edit_distance(s1, s2):
     def insertion_cost(char):
-        if not re.match(NON_PERSIAN_CHARS_REGEX, char):
+        if not re.match(tools.NON_PERSIAN_CHARS_REGEX, char):
             return 2.0
         return 0.1
 
     def deletion_cost(char):
-        if not re.match(NON_PERSIAN_CHARS_REGEX, char):
+        if not re.match(tools.NON_PERSIAN_CHARS_REGEX, char):
             return 2.0
         return 0.1
 
     def substitution_cost(char_a, char_b):
         cost = 0.1
-        if re.match(NON_PERSIAN_CHARS_REGEX, char_a):
+        if re.match(tools.NON_PERSIAN_CHARS_REGEX, char_a):
             cost += 2.0
-        if re.match(NON_PERSIAN_CHARS_REGEX, char_b):
+        if re.match(tools.NON_PERSIAN_CHARS_REGEX, char_b):
             cost += 2.0
         return cost
 
@@ -153,7 +97,8 @@ def make_integrated_string(input_string):
     return integrated_string, integrated_spans
 
 
-def detect_bad_formed_integrated(integrated_string: str, integrated_spans, illegal_words: List[str]): #-> List[(str, str, (int, int))]:
+def detect_bad_formed_integrated(integrated_string: str, integrated_spans,
+                                 illegal_words: List[str]):  # -> List[(str, str, (int, int))]:
     dubiouses = []  # format --> [(illegal, found, (start, end))]
     illegal_regexes = get_illegal_regex_from_words(illegal_words)
 
@@ -183,9 +128,9 @@ def get_illegal_regex_for_integrated(illegal_words_list: List[str]) -> List[str]
 
 
 def run(text: str, illegal_words: List[str]):
-    persian_dictionary = get_persian_words_dictionary()
-    word_list = tokenize(text)
-    normal_word_list = hazm_normalize(word_list)
+    persian_dictionary = tools.get_persian_words_dictionary()
+    word_list = tools.tokenize(text)
+    normal_word_list = tools.hazm_normalize(word_list)
     dubiouses = detect_bad_formed_words(normal_word_list, illegal_words)
     dubiouses = clean_false_positives(dubiouses, persian_dictionary)
     integrated_string, integrated_spans = make_integrated_string(text)
