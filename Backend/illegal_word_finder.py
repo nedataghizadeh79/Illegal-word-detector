@@ -34,37 +34,10 @@ def detect_bad_formed_words(word_list: list, illegal_words: list) -> list:  # [(
     return dubiouses
 
 
-def edit_distance(s1, s2):
-    def insertion_cost(char):
-        if not re.match(tools.NON_PERSIAN_CHARS_REGEX, char):
-            return 2.0
-        return 0.1
-
-    def deletion_cost(char):
-        if not re.match(tools.NON_PERSIAN_CHARS_REGEX, char):
-            return 2.0
-        return 0.1
-
-    def substitution_cost(char_a, char_b):
-        cost = 0.1
-        if re.match(tools.NON_PERSIAN_CHARS_REGEX, char_a):
-            cost += 2.0
-        if re.match(tools.NON_PERSIAN_CHARS_REGEX, char_b):
-            cost += 2.0
-        return cost
-
-    weighted_levenshtein = WeightedLevenshtein(
-        substitution_cost_fn=substitution_cost,
-        insertion_cost_fn=insertion_cost,
-        deletion_cost_fn=deletion_cost)
-
-    return weighted_levenshtein.distance(s1, s2)
-
-
 def is_false_positive(token: str, illegal_word: str, persian_words: set) -> bool:
     # check if word exists in the persian dictionary
     if token not in persian_words and \
-            edit_distance(token, illegal_word) < ILLEGAL_EDIT_DISTANCE_THRESHOLD:
+            tools.edit_distance(token, illegal_word) < ILLEGAL_EDIT_DISTANCE_THRESHOLD:
         print("True positive: ", token)
         return False  # not false positive
 

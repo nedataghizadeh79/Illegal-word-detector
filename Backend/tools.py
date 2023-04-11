@@ -1,6 +1,13 @@
+"""
+Common tools that all pipelines will share.
+"""
+import re
+from typing import List
+
 import hazm
 import regex
 import yaml
+from strsimpy import WeightedLevenshtein
 
 NON_PERSIAN_CHARS_REGEX = r'[^\u0621-\u064A|\u0686|\u0698|\u06A9|\u06af|\u06be|\u06c1|\u06c3]'
 VALID_PERSIAN_CHARS_REGEX = r'[\u0600-\u06FF\s]'
@@ -29,15 +36,7 @@ def get_persian_words_dictionary():
 def get_persian_similar_characters():
     with open("assets/similar_persian_chars.yml", 'r') as f:
         chars_lists = yaml.safe_load(f)
-        indices = {}
-
-        for i, group in enumerate(chars_lists):
-            for city in group:
-                indices.setdefault(city, set()).add(i)
-
-
-def common_groups(city1, city2, indices: dict):
-    return indices.get(city1, set()) & indices.get(city2, set())
+        return [set(cl) for cl in chars_lists]
 
 
 def hazm_normalize(word_list):
@@ -58,3 +57,33 @@ def tokenize(normal_string):
             (match_object.group(1), (match_object.start(1) - 1, match_object.end(1) - 1))
         )
     return word_list
+
+
+def edit_distance(s1, s2):
+    persian_similar_characters = get_persian_similar_characters()
+
+    def insertion_cost(char):
+        if not re.match(NON_PERSIAN_CHARS_REGEX, char):
+            return 2.0
+        return 0.1
+
+    def deletion_cost(char):
+        if not re.match(NON_PERSIAN_CHARS_REGEX, char):
+            return 2.0
+        return 0.1
+
+    def substitution_cost(char_a, char_b):
+        if re.match(NON_PERSIAN_CHARS_REGEX, char_a) or re.match(NON_PERSIAN_CHARS_REGEX, char_b):
+            return 0.1
+        subset = {char_a, char_b}
+        for group in persian_similar_characters:
+            if subset.issubset(group):
+                return 1
+        return 3
+
+    weighted_levenshtein = WeightedLevenshtein(
+        substitution_cost_fn=substitution_cost,
+        insertion_cost_fn=insertion_cost,
+        deletion_cost_fn=deletion_cost)
+
+    return weighted_levenshtein.distance(s1, s2)
