@@ -3,6 +3,8 @@ from typing import List, Tuple, Set, Dict
 
 import tools
 
+EDIT_DISTANCE_THRESHOLD = 4
+
 
 def process_illegals(illegal_words: List[str]):
     regexes = {}
@@ -17,13 +19,26 @@ def process_illegals(illegal_words: List[str]):
         regex = r'.*'
         for char in illegal:
             if char in char_groups:
-                regex += rf'[{"".join([c for c in char_groups[char]])}]+.*'
+                regex += rf'[{"".join([c for c in char_groups[char]])}]+.*\s*{tools.NIM_FASELE_REGEX}*'
             else:
-                regex += rf'{char}+.*\s*'
+                regex += rf'{char}+.*\s*{tools.NIM_FASELE_REGEX}*'
                 # regexes[illegal]
         regexes[illegal] = regex
 
     return regexes
+
+
+def is_false_positive(illegal_word: str, token: str) -> bool:
+    # print(illegal_word, '  VS   ', token, end=' ')
+    if token == illegal_word:
+        return False
+    if token in tools.persian_words_dictionary:
+        return True
+    simple_illegal_word = tools.custom_simplifier(illegal_word)
+    simple_token = tools.custom_simplifier(token)
+    edit_distance = tools.edit_distance(simple_token, simple_illegal_word)
+    # print(' -> ', edit_distance)
+    return edit_distance > EDIT_DISTANCE_THRESHOLD
 
 
 def run(text: str, illegal_words: List[str]):
@@ -51,9 +66,9 @@ def run(text: str, illegal_words: List[str]):
             bad_word_match = re.search(regex_combination, word)
             if bad_word_match:
                 captured_groups = bad_word_match.groups()
-                for i, group in enumerate(captured_groups):
-                    if group:
-                        fucks.setdefault(illegal_words[i], []).append((word, span))
+                for index, group in enumerate(captured_groups):
+                    if group and not is_false_positive(illegal_words[index], word):
+                        fucks.setdefault(illegal_words[index], []).append((word, span))
 
     return fucks
 
@@ -111,7 +126,7 @@ def run_tests():
 
     illegals_test = [
         'تفنگ',
-        'سیر',
+        # 'سیر',
         'سیرجان',
         'بی ادب',
         'بی‌تربیت',
@@ -124,11 +139,12 @@ def run_tests():
     ]
 
     # tests = [
-    #     'من#ترشی٫دوست@دارمگپچجژ',
+    #     'میخوام برم به سیر‌جان',
     # ]
-
+    #
     # illegals_test = [
-    #     'ترشی',
+    #     'سیر',
+    #     'سیرجان',
     # ]
 
     for test in tests:
@@ -140,4 +156,5 @@ def run_tests():
 
 if __name__ == '__main__':
     run_tests()
+    # print(is_false_positive('ترشی', 'ترشک'))
     # print(run('من ترشی دوست دارم', ['ترشی', 'سیر', 'سیرجان', 'بی ادب', 'بی‌تربیت', 'چنگال', 'سرما', 'ترشی', 'ممد']))
