@@ -4,7 +4,7 @@ from typing import List, Dict, Tuple, Annotated
 from fastapi import FastAPI, UploadFile, File, Form, Query, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from illegal_word_finder import run as run_illegal_finder
+from legacy_pipeline import run as run_illegal_finder
 from pdf_reader_module import Pdf2txt
 
 
