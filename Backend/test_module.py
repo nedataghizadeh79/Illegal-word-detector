@@ -2,9 +2,8 @@ from superduper_pipeline import run as superduper_run
 from legacy_pipeline import run as legacy_run
 from normalizer_pipeline import run as normalizer_run
 
-
-def run_tests(pipeline: callable):
-    tests = [
+test1 = (
+    [
         'من تر۲۲۲شی دوست دارم.'
         # [3,9]
         , 'من ترش23432ی دوست دارم'
@@ -46,18 +45,13 @@ def run_tests(pipeline: callable):
         # ok
         , 'من منتلیمخنخرخحهنخشهتهتاییلا دوست دارم'
         # [4,29]
-        , 'من تگنف دارم'
-        # [3,7]
         , 'تفنگی دارم خوشگله ترش یکمی هست بهبه'
         # [0,5]
         , 'غستننتنیه شهر خیلی بدیه'
         , 'قیر غابل غبول است هرفت!'
         , 'سرم۱ زده شدم لامسپ'
-    ]
-
-    illegals_test = [
+    ], [
         'تفنگ',
-        # 'سیر',
         'سیرجان',
         'بی ادب',
         'بی‌تربیت',
@@ -69,12 +63,33 @@ def run_tests(pipeline: callable):
         'قسطنتنیه',
         'لامصب',
     ]
+)
 
-    for test in tests:
-        print('\n**', test, '**')
-        out = superduper_run(test, illegals_test)
-        for item in out:
-            print(repr(item), ':', out[item])
+test2 = (
+    [
+        'اسقر برای من یک تفن‌ک بخر',
+        'کلاهم پس معرکه‌اس',
+        'شلغم پلو با گردنبند',
+    ], [
+        'تفنگ',
+        'کلاه',
+        'اصغر',
+        'معرکه',
+        'شلغم پلو',
+        'گردن',
+    ]
+)
+
+
+def run_tests(pipeline: callable):
+    tests = [test1, test2]
+    for test_index, (test_texts, illegals) in enumerate(tests):
+        print("\n----------------------------------Test set #", test_index + 1, "----------------------------------")
+        for test_text in test_texts:
+            print('\n**', test_text, '**')
+            out = pipeline(test_text, illegals)
+            for item in out:
+                print(repr(item), ':', out[item])
 
 
 if __name__ == '__main__':
