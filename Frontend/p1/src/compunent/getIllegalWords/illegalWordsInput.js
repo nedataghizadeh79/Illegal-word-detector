@@ -14,6 +14,10 @@ export default function InputChips({setSaveIllegals}) {
 
     //when we change our input this function save the changes and new inputs.
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+        }, 300)
+    }, [allInputValue] )
 
 
     const handleInputChange = (event) => {
