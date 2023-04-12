@@ -37,7 +37,6 @@ def is_false_positive(token: str, illegal_word: str, persian_words: set) -> bool
     # check if word exists in the persian dictionary
     if token not in persian_words and \
             tools.edit_distance(token, illegal_word) < ILLEGAL_EDIT_DISTANCE_THRESHOLD:
-        # print("True positive: ", token)
         return False  # not false positive
 
     return True
@@ -93,10 +92,6 @@ def get_illegal_regex_for_integrated(illegal_words_list: List[str]) -> List[str]
         word_regex = '+'.join(illegal) + '+'
         word_regex_list.append(word_regex)
     return word_regex_list
-
-
-# def clean_fp_integrated(dubiouses):
-#     return [dubious for dubious in dubiouses if is_false_positive(dubious[1], dubious[0])]
 
 
 def run(text: str, illegal_words: List[str]):
