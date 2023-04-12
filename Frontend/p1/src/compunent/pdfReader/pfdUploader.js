@@ -12,12 +12,12 @@ function UploadPDF({saveIllegals}) {
         setFile(e.target.files[0]);
     };
 
-
     useEffect(() => {
         const timer = setTimeout(() => {
             console.log(saveIllegals)
-        }, 300)
+        }, 800)
     }, saveIllegals)
+
 
 
     // in this function we want handel send request to backend and also accept just pdf format (if you change .pfd to another format like .txt you can accept another formats)

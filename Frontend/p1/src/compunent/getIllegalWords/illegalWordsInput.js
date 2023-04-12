@@ -1,6 +1,6 @@
 //this component is for handel chips, when you write sth in inputs, your words convert to chip.
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -13,11 +13,17 @@ export default function InputChips({setSaveIllegals}) {
     const [chips, setChips] = useState([]);
 
     //when we change our input this function save the changes and new inputs.
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+        }, 300)
+    }, allInputValue )
+
+
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
 
-    console.log(allInputValue)
 
     //when we write sth in our input, then we press Enter key, this function will call.
     const handleInputKeyDown = (event) => {
