@@ -1,6 +1,6 @@
 //in this component we want to get access for uploading pdf to our website.
 
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import './pdfUploader.css'
 import axios from "axios";
 
@@ -12,20 +12,32 @@ function UploadPDF({saveIllegals}) {
         setFile(e.target.files[0]);
     };
 
+
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            console.log(saveIllegals)
+        }, 300)
+    }, saveIllegals)
+
+
+
+
     // in this function we want handel send request to backend and also accept just pdf format (if you change .pfd to another format like .txt you can accept another formats)
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
+        let formData = new FormData();
 
-        FormData.append("pdf_file", file);
-        FormData.append('illegal_words' , saveIllegals)
+        formData.append("pdf_file", file);
+        formData.append('illegal_words' , saveIllegals)
         axios.post("http://localhost:8080/runpdf" , formData,{
             headers:{
                 "Content-Type": "multipart/form-data",
             }
         } )
     };
+
 
     return (
         <div className='inputFileDiv'>

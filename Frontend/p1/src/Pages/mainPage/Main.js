@@ -54,7 +54,7 @@ const Main = ({saveIllegals}) => {
             return result;
 
         }).catch(function (error) {
-            // console.log(error);
+            console.log(error);
         });
     }
 
