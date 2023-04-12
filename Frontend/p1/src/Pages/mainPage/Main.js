@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 const Main = ({saveIllegals}) => {
     const [textArea, setTextArea] = useState('')
-    const [mainInformation, setMainInformation] = useState({illegalWords: [], text: ""})
+    const [mainInformation, setMainInformation] = useState({illegalWords: ['aa','kjkjjkjjk'], text: "sag to in hw"})
     const [showColoredResult, setShowColoredResult] = useState("")
 
     // after you click in the related button, this function will call, we post the input value for backend then we can get the result
@@ -18,6 +18,8 @@ const Main = ({saveIllegals}) => {
     //then with the help of these lists we try to show the special words in text, we make red illegals words
     // if you move your mouse over the red words, you can see which of the corresponding words is illegal.
 
+
+
     const processHandler = () => {
         setMainInformation(prevState => ({...prevState, text: textArea}));
         setMainInformation(pre => ({...pre, illegalWords: saveIllegals}))
@@ -26,15 +28,12 @@ const Main = ({saveIllegals}) => {
             text: mainInformation.text
         }).then(function (response) {
 
-            console.log(response.data.illegals);
-
             const illegalSpans = []
             for (const word in response.data.illegals) {
                 for (const span of response.data.illegals[word]) {
                     illegalSpans.push([...span, word])
                 }
             }
-            console.log(illegalSpans);
 
             illegalSpans.sort((a, b) => a[0] - b[0])
 
@@ -49,7 +48,7 @@ const Main = ({saveIllegals}) => {
                 </Tooltip>)
             })
             result.push(textArea.slice(startIndex))
-            console.log(result);
+            // console.log(result);
             setShowColoredResult(result)
             return result;
 
