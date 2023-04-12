@@ -11,9 +11,10 @@ from strsimpy import WeightedLevenshtein
 
 NON_PERSIAN_CHARS_REGEX = r'[^\u0621-\u064A|\u0686|\u0698|\u06A9|\u06af|\u06be|\u06c1|\u06c3]'
 VALID_PERSIAN_CHARS_REGEX = r'[\u0600-\u06FF\s]'
+RECURRENT_PATTERN_REGEX = rf'({VALID_PERSIAN_CHARS_REGEX})\1+'
 
 
-def get_persian_words_dictionary():
+def _get_persian_words_dictionary():
     base_address = "assets/dictionaries"
     persian_words = set()
 
@@ -31,6 +32,9 @@ def get_persian_words_dictionary():
         persian_words.update([x.split(":")[0].strip() for x in f.readlines()[1:]])
 
     return persian_words
+
+
+persian_words_dictionary = _get_persian_words_dictionary()
 
 
 def get_persian_similar_characters():
