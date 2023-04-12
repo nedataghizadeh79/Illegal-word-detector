@@ -12,11 +12,14 @@ function UploadPDF({saveIllegals}) {
         setFile(e.target.files[0]);
     };
 
+
+
     useEffect(() => {
         const timer = setTimeout(() => {
             console.log(saveIllegals)
-        }, 800)
+        }, 300)
     }, saveIllegals)
+
 
 
 
