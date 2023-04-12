@@ -8,9 +8,12 @@ def process_illegals(illegal_words: List[str]):
     regexes = {}
     similar_chars = tools.get_persian_similar_characters()
 
-    # flatmap similar_chars
-    char_groups = {char: char_list for char_list in similar_chars for char in char_list}
-
+    char_groups = {}
+    for char_list in similar_chars:
+        for char in char_list:
+            char_groups.setdefault(char, []).append(char_list)
+    # char_groups = {char: char_list for char_list in similar_chars for char in char_list}
+    print(char_groups)
     for illegal in illegal_words:
         regex = r'.*'
         for char in illegal:
@@ -42,10 +45,10 @@ def run(text: str, illegal_words: List[str]):
             word = ''.join(token_values[i:i + token_count])
             span = token_ranges[i][0], token_ranges[i + token_count - 1][1]
 
-    # for word, span in normal_word_list:
-        # for illegal, regex in illegal_regexes.items():
-        #     if re.search(regex, word):
-        #         print(word, illegal, span)
+            # for word, span in normal_word_list:
+            # for illegal, regex in illegal_regexes.items():
+            #     if re.search(regex, word):
+            #         print(word, illegal, span)
             bad_word_match = re.search(regex_combination, word)
             if bad_word_match:
                 captured_groups = bad_word_match.groups()
@@ -103,6 +106,8 @@ def run_tests():
         # [3,7]
         , 'تفنگی دارم خوشگله ترش یکمی هست بهبه'
         # [0,5]
+        , 'غستننتنیه شهر خیلی بدیه'
+        , 'قیر غابل غبول است هرفت!'
     ]
 
     illegals_test = [
@@ -114,7 +119,9 @@ def run_tests():
         'چنگال',
         'سرما',
         'ترشی',
-        'ممد'
+        'ممد',
+        'غیرقابلقبول',
+        'قسطنتنیه',
     ]
 
     # tests = [

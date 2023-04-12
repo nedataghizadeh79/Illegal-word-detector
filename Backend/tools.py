@@ -43,7 +43,7 @@ persian_words_dictionary = _get_persian_words_dictionary()
 
 
 def get_persian_similar_characters():
-    with open("assets/similar_persian_chars.yml", 'r', encoding='utf-8') as f:
+    with open("assets/persian_char_groups.yml", 'r', encoding='utf-8') as f:
         chars_lists = yaml.safe_load(f)
         return [set(cl) for cl in chars_lists]
 
