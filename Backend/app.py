@@ -30,20 +30,11 @@ app.add_middleware(
 )
 
 
-@app.post("/runmock")
-async def run_mock(inp: InputSchema) -> OutputSchema:
-    out = {
-        "تفنگ": [(0, 4)],
-        "سرکه": [(6, 14)],
-        "اصغر": [(18, 25)]
-    }
-    return OutputSchema(illegals=out)
-
-
 @app.post("/run")
 async def run(inp: InputSchema) -> OutputSchema:
     res = run_illegal_finder(inp.text, inp.illegal_words)
-    return OutputSchema(illegals=res)
+    output = {key: [x[1] for x in value] for key, value in res.items()}
+    return OutputSchema(illegals=output)
 
 
 @app.post("/runpdf")
