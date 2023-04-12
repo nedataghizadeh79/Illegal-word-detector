@@ -1,7 +1,7 @@
 //this is the main page, we call our components that we want to show them in our main page.
 
 import './Main.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import * as React from 'react';
 import Tooltip from '@mui/material/Tooltip';
@@ -18,13 +18,18 @@ const Main = ({saveIllegals}) => {
     //then with the help of these lists we try to show the special words in text, we make red illegals words
     // if you move your mouse over the red words, you can see which of the corresponding words is illegal.
 
+
+    useEffect(()=> {
+        setMainInformation(prevState => ({...prevState, text: textArea, illegalWords: saveIllegals}));
+    },[mainInformation.illegalWords , mainInformation.illegalWords])
+
+
     const processHandler = () => {
-        setMainInformation(prevState => ({...prevState, text: textArea}));
-        setMainInformation(pre => ({...pre, illegalWords: saveIllegals}))
+
         axios.post('http://localhost:8080/run', {
             illegal_words: mainInformation.illegalWords,
             text: mainInformation.text
-        }).then(function (response) {
+        }).then(function (response)  {
 
             console.log(response.data.illegals);
 
