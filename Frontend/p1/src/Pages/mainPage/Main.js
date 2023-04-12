@@ -21,7 +21,7 @@ const Main = ({saveIllegals}) => {
     const processHandler = () => {
         setMainInformation(prevState => ({...prevState, text: textArea}));
         setMainInformation(pre => ({...pre, illegalWords: saveIllegals}))
-        axios.post('https://714c-46-209-40-254.eu.ngrok.io/runmock', {
+        axios.post('https://ccaf-2-147-31-195.ngrok-free.app/test', {
             illegal_words: mainInformation.illegalWords,
             text: mainInformation.text
         }).then(function (response) {
