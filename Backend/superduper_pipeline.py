@@ -48,7 +48,7 @@ def run(text: str, illegal_words: List[str]):
     normal_word_list = tools.hazm_normalize(word_list)
 
     illegal_regexes = process_illegals(illegal_words)
-    fucks = {}
+    dubious = {}
 
     regex_combination = "(" + ")|(".join(illegal_regexes.values()) + ")"
 
@@ -68,9 +68,23 @@ def run(text: str, illegal_words: List[str]):
                 captured_groups = bad_word_match.groups()
                 for index, group in enumerate(captured_groups):
                     if group and not is_false_positive(illegal_words[index], word):
-                        fucks.setdefault(illegal_words[index], []).append((word, span))
+                        dubious.setdefault(illegal_words[index], []).append((word, span))
 
-    return fucks
+    # Handle overlapping spans -> choose the smallest one
+    for word, spans in dubious.items():
+        spans.sort(key=lambda x: x[1][1] - x[1][0])
+        new_spans = []
+        for span in spans:
+            if not new_spans:
+                new_spans.append(span)
+            else:
+                if new_spans[-1][1][1] >= span[1][0]:
+                    new_spans[-1] = (new_spans[-1][0], (new_spans[-1][1][0], span[1][1]))
+                else:
+                    new_spans.append(span)
+        dubious[word] = new_spans
+
+    return dubious
 
 
 def run_tests():
@@ -106,7 +120,7 @@ def run_tests():
         , 'من#ترشی٫دوست@دارم'
         , 'میخواهم برم به س‌ی‌ر‌ج‌ا‌ن.'
         # [15,20]
-        , 'بیا بریم یه سSSیSerرجاfن'
+        , 'بیا سیرجان بریم یه سSSیSerرجاfن'
         # [12,22]
         , 'من تف‌نگ میخوام.'
         # [3,6]
