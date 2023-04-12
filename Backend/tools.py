@@ -111,3 +111,10 @@ def check_overlap(span1, span2):
     if span2[0] <= span1[0] and span2[1] <= span1[1]:
         return (span2[0], span1[1])
     return None
+
+
+def custom_simplifier(token: str):
+    pure_persian = re.sub(INVALID_PERSIAN_CHARS_REGEX, '', token)
+    denumbered = re.sub(r'\d', '', pure_persian)
+    lemmatized = hazm_lemmatize(denumbered).split("#")[0]
+    return re.sub(RECURRENT_PATTERN_REGEX, r'\1', lemmatized)

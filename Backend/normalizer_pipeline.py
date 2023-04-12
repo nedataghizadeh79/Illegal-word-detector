@@ -14,7 +14,7 @@ def custom_simplifier(token: str):
 
 def run_for_token(token: Tuple[str, Tuple], illegals: Set[str], simplified_illegals: Dict[str, str]):
     token = (token[0], token[1], custom_simplifier(token[0]))
-
+    print(token)
     # print(token)
     if token[2] in simplified_illegals:
         if (token[0] in illegals) or (token[0] not in tools.persian_words_dictionary):
@@ -48,12 +48,10 @@ def run(text: str, illegals: List[str]):
                 if token_values[i] in illegals:
                     dubious[token_values[i]] = token_ranges[i]
                     del tokens[i]
-                    print(type(token_values))
                     del token_values[i]
                     del token_ranges[i]
                     continue
                 else:
-                    print(tokens)
                     token = tokens[i]
 
             # Joined tokens
