@@ -1,6 +1,5 @@
 import re
 from typing import List
-from strsimpy import WeightedLevenshtein
 
 import tools
 
@@ -38,7 +37,7 @@ def is_false_positive(token: str, illegal_word: str, persian_words: set) -> bool
     # check if word exists in the persian dictionary
     if token not in persian_words and \
             tools.edit_distance(token, illegal_word) < ILLEGAL_EDIT_DISTANCE_THRESHOLD:
-        print("True positive: ", token)
+        # print("True positive: ", token)
         return False  # not false positive
 
     return True
@@ -101,7 +100,7 @@ def get_illegal_regex_for_integrated(illegal_words_list: List[str]) -> List[str]
 
 
 def run(text: str, illegal_words: List[str]):
-    persian_dictionary = tools.get_persian_words_dictionary()
+    persian_dictionary = tools.persian_words_dictionary
     word_list = tools.tokenize(text)
     normal_word_list = tools.hazm_normalize(word_list)
     dubiouses = detect_bad_formed_words(normal_word_list, illegal_words)

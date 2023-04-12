@@ -1,6 +1,3 @@
-
-
-
 from typing import List, Dict, Tuple
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

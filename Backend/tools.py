@@ -38,7 +38,7 @@ persian_words_dictionary = _get_persian_words_dictionary()
 
 
 def get_persian_similar_characters():
-    with open("assets/similar_persian_chars.yml", 'r') as f:
+    with open("assets/similar_persian_chars.yml", 'r', encoding='utf-8') as f:
         chars_lists = yaml.safe_load(f)
         return [set(cl) for cl in chars_lists]
 
@@ -91,3 +91,15 @@ def edit_distance(s1, s2):
         deletion_cost_fn=deletion_cost)
 
     return weighted_levenshtein.distance(s1, s2)
+
+
+def check_overlap(span1, span2):
+    if span2[0] >= span1[0] and span2[1] >= span1[1]:
+        return (span1[0], span2[1])
+    if span2[0] >= span1[0] and span2[1] <= span1[1]:
+        return span1
+    if span2[0] <= span1[0] and span2[1] >= span1[1]:
+        return span2
+    if span2[0] <= span1[0] and span2[1] <= span1[1]:
+        return (span2[0], span1[1])
+    return None
