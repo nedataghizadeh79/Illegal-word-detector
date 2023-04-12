@@ -13,5 +13,21 @@ Content-Type: application/json
   ],
   "text" : "سلام الاغ عزیز، حالت چطوره؟ خوب و خوش و سلامتی، بارت چطوره؟"
 }
+###
 
+# test runpdf endpoint
+
+POST http://localhost:8000/runpdf
+Content-Type: application/json
+
+{
+  "illegal_words": [
+    "تفنگ",
+     "سیر",
+     "سیرجان",
+     "بی ادب",
+     "بی‌تربیت"
+  ],
+  "pdf" : "test.pdf"
+}
 ###

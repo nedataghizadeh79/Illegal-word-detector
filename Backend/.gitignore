@@ -1,3 +1,4 @@
 Pipfile.lock
 .idea
 __pycache__
+assets/test_pdfs/test_pdf_*.pdf

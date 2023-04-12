@@ -10,8 +10,13 @@ import yaml
 from strsimpy import WeightedLevenshtein
 
 NON_PERSIAN_CHARS_REGEX = r'[^\u0621-\u064A|\u0686|\u0698|\u06A9|\u06af|\u06be|\u06c1|\u06c3]'
-VALID_PERSIAN_CHARS_REGEX = r'[\u0600-\u06FF\s]'
+VALID_PERSIAN_CHARS_REGEX = r'[\u0600-\u06FF\uFB50-\uFDFF\s]'
+INVALID_PERSIAN_CHARS_REGEX = r'[^\u0600-\u06FF\uFB50-\uFDFF\s]'
+VALID_PERSIAN_CHARACTERS_REGEX = '[\u0621-\u064A|\u0686|\u0698|\u06A9|\u06af|\u06be|\u06c1|\u06c3|\u06CC]'
 RECURRENT_PATTERN_REGEX = rf'({VALID_PERSIAN_CHARS_REGEX})\1+'
+
+_normalizer = hazm.Normalizer()
+_lemmatizer = hazm.Lemmatizer()
 
 
 def _get_persian_words_dictionary():
@@ -44,11 +49,14 @@ def get_persian_similar_characters():
 
 
 def hazm_normalize(word_list):
-    normalizer = hazm.Normalizer()
     normal_word_list = []
     for word in word_list:
-        normal_word_list.append((normalizer.normalize(word[0]), word[1]))
+        normal_word_list.append((_normalizer.normalize(word[0]), word[1]))
     return normal_word_list
+
+
+def hazm_lemmatize(word):
+    return _lemmatizer.lemmatize(word)
 
 
 def tokenize(normal_string):

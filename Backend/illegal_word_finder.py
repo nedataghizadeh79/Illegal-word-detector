@@ -101,10 +101,14 @@ def get_illegal_regex_for_integrated(illegal_words_list: List[str]) -> List[str]
 
 def run(text: str, illegal_words: List[str]):
     persian_dictionary = tools.persian_words_dictionary
+
     word_list = tools.tokenize(text)
+
     normal_word_list = tools.hazm_normalize(word_list)
+
     dubiouses = detect_bad_formed_words(normal_word_list, illegal_words)
     dubiouses = clean_false_positives(dubiouses, persian_dictionary)
+
     integrated_string, integrated_spans = make_integrated_string(text)
     integrated_dubiouses = detect_bad_formed_integrated(integrated_string, integrated_spans, illegal_words)
     # TODO cleanup false positive for integrated!
