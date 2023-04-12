@@ -1,3 +1,5 @@
+//this component is for handel chips, when you write sth in inputs, your words convert to chip.
+
 import React, {useState} from 'react';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -5,15 +7,19 @@ import TextField from '@mui/material/TextField';
 import Box from "@mui/material/Box";
 
 export default function InputChips({setSaveIllegals}) {
+    // we define useState for saving our data
     const [inputValue, setInputValue] = useState('');
     const [allInputValue, setAllInputValue] = useState([]);
     const [chips, setChips] = useState([]);
 
+    //when we change our input this function save the changes and new inputs.
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
+
     console.log(allInputValue)
 
+    //when we write sth in our input, then we press Enter key, this function will call.
     const handleInputKeyDown = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -28,7 +34,7 @@ export default function InputChips({setSaveIllegals}) {
         }
     };
 
-
+    // when you delete chips, also it's values should delete from our list.
     const handleChipDelete = (chipToDelete) => () => {
         const chipIndex = allInputValue.findIndex((chip) => chip === chipToDelete);
         const newChips = [...allInputValue];
@@ -67,6 +73,7 @@ export default function InputChips({setSaveIllegals}) {
                         <Chip
                             key={index}
                             label={chip.label}
+                            // when you press x icon on chips, it will delete
                             onDelete={handleChipDelete(chip)}
                         />
                     ))}

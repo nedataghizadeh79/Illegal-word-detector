@@ -1,3 +1,5 @@
+//we want to have 2 tabs for our 2 main parts in our project, so one of them is for correcting texts that contain illegal words and the second tab is for correcting pdf
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
@@ -47,6 +49,7 @@ export default function BasicTabs({saveIllegals}) {
         setValue(newValue);
     };
 
+    // we want 2 tabs, so we call TabPanel 2 times and use our components in them.
     return (
         <Box sx={{ width: '100%', direction:'rtl' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' ,display:"flex" , alignItems:"center" , justifyContent:"center" }}>
