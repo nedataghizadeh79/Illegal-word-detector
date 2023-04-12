@@ -62,7 +62,7 @@ export default function BasicTabs({saveIllegals}) {
                 <Main saveIllegals={saveIllegals} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <UploadPDF/>
+                <UploadPDF saveIllegals={saveIllegals}/>
             </TabPanel>
         </Box>
     );

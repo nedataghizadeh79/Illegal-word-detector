@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import './pdfUploader.css'
+import axios from "axios";
 
-function UploadPDF() {
+function UploadPDF({saveIllegals}) {
     const [file, setFile] = useState(null);
 
     // we can accept a pdf then we should save it in our variable
@@ -14,29 +15,23 @@ function UploadPDF() {
     // in this function we want handel send request to backend and also accept just pdf format (if you change .pfd to another format like .txt you can accept another formats)
     const handleSubmit = (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append("pdf", file);
 
-        // Send the form data to the backend
-        fetch("http://localhost:5000/upload", {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => {
-                // Handle the response from the backend
-                console.log(response);
-            })
-            .catch((error) => {
-                // Handle any errors from the fetch request
-                console.error(error);
-            });
+        const formData = new FormData();
+
+        FormData.append("pdf_file", file);
+        FormData.append('illegal_words' , saveIllegals)
+        axios.post("http://localhost:8080/runpdf" , formData,{
+            headers:{
+                "Content-Type": "multipart/form-data",
+            }
+        } )
     };
 
     return (
         <div className='inputFileDiv'>
         <form className='form' onSubmit={handleSubmit}>
                 <label className='uploadLabel' htmlFor="pdf-upload"> لطفا پی دی اف خود را جهت تصحیح بارگزاری کنید</label>
-                <input className='custom-file-upload' type="file" id="pdf-upload" onChange={handleFileChange} />
+                <input name='pdf_file' className='custom-file-upload' type="file" id="pdf-upload" onChange={handleFileChange} />
                 <button className='submitButtun' type="submit"> بارگذاری  </button>
         </form>
         </div>
