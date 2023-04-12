@@ -26,6 +26,9 @@ const Main = ({saveIllegals}) => {
 
     const processHandler = () => {
 
+        setMainInformation(prevState => ({...prevState, text: textArea}));
+        setMainInformation(pre => ({...pre, illegalWords: saveIllegals}))
+
         axios.post('http://localhost:8080/run', {
             illegal_words: mainInformation.illegalWords,
             text: mainInformation.text
