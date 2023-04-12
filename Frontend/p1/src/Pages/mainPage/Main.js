@@ -18,18 +18,20 @@ const Main = ({saveIllegals}) => {
     //then with the help of these lists we try to show the special words in text, we make red illegals words
     // if you move your mouse over the red words, you can see which of the corresponding words is illegal.
 
-
-    useEffect(()=> {
-        setMainInformation(prevState => ({...prevState, text: textArea, illegalWords: saveIllegals}));
-    },[mainInformation.illegalWords , mainInformation.illegalWords])
+    useEffect(() => {
+        const timer = setTimeout(() => {
+        }, 300)
+    }, [mainInformation])
 
 
     const processHandler = () => {
-
-        axios.post('http://localhost:8080/run', {
-            illegal_words: mainInformation.illegalWords,
-            text: mainInformation.text
-        }).then(function (response)  {
+        // setMainInformation(prevState => ({...prevState, text: textArea}));
+        // setMainInformation(pre => ({...pre, illegalWords: saveIllegals}))
+        setMainInformation({illegalWords: saveIllegals, text: textArea},
+            axios.post('http://localhost:8080/run', {
+                illegal_words: mainInformation.illegalWords,
+                text: mainInformation.text
+            }).then(function (response) {
 
             console.log(response.data.illegals);
 
@@ -60,7 +62,7 @@ const Main = ({saveIllegals}) => {
 
         }).catch(function (error) {
             console.log(error);
-        });
+        })
     }
 
     const textAreaHandler = (event) => {
