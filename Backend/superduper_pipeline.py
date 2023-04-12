@@ -1,6 +1,5 @@
 import re
-from typing import List, Tuple, Set, Dict
-
+from typing import List
 import tools
 
 EDIT_DISTANCE_THRESHOLD = 4
@@ -14,7 +13,6 @@ def process_illegals(illegal_words: List[str]):
     for char_list in similar_chars:
         for char in char_list:
             char_groups.setdefault(char, set()).update(char_list)
-    # char_groups = {char: char_list for char_list in similar_chars for char in char_list}
     for illegal in illegal_words:
         regex = r'.*'
         for char in illegal:
@@ -22,7 +20,6 @@ def process_illegals(illegal_words: List[str]):
                 regex += rf'[{"".join([c for c in char_groups[char]])}]+.*\s*{tools.NIM_FASELE_REGEX}*'
             else:
                 regex += rf'{char}+.*\s*{tools.NIM_FASELE_REGEX}*'
-                # regexes[illegal]
         regexes[illegal] = regex
 
     return regexes
@@ -42,8 +39,6 @@ def is_false_positive(illegal_word: str, token: str) -> bool:
 
 
 def run(text: str, illegal_words: List[str]):
-    persian_dictionary = tools.persian_words_dictionary
-
     word_list = tools.tokenize(text)
     normal_word_list = tools.hazm_normalize(word_list)
 
@@ -85,90 +80,3 @@ def run(text: str, illegal_words: List[str]):
         dubious[word] = new_spans
 
     return dubious
-
-
-def run_tests():
-    tests = [
-        'من تر۲۲۲شی دوست دارم.'
-        # [3,9]
-        , 'من ترش23432ی دوست دارم'
-        # [3,11]
-        , 'من ت٫ریال^٪ریال&آٖۤآلبدذ رشی دوست دارم'
-        # ok
-        , 'من ت#$@رشی          دوست دارم'
-        # [3,19]
-        , 'من       ت                      ر                ش                      ی           دوست دارم'
-        # [3,83]
-        , 'من تررررررررررررررررررشششششی دوست دارم'
-        # [3,27]
-        , 'من ترش و شیرین دوست دارم'
-        # ok
-        , 'من ترشک دوست دارم'
-        # ok
-        , 'مراقب باش که سرمانخوری'
-        # ok
-        , 'سرمان به باد رفت'
-        # ok
-        , 'سر‌‌‌‌ما بد است!'  # multiple nim faseles!!
-        # [0, 9]
-        , 'سررررررررررمامان داد نزن'
-        # ok
-        , 'سرمامانداد نزن'
-        # ok
-        , 'من در سررم٫ااا میخواهم که تررر٪ش۰ی سییییـــــــر بخورم '
-        # [  [35,48] , [26,34] , [6,14] ]
-        , 'من#ترشی٫دوست@دارم'
-        , 'میخواهم برم به س‌ی‌ر‌ج‌ا‌ن.'
-        # [15,20]
-        , 'بیا سیرجان بریم یه سSSیSerرجاfن'
-        # [12,22]
-        , 'من تف‌نگ میخوام.'
-        # [3,6]
-        , 'من تفنگ دوست دارم'
-        # [3,7]
-        , 'من منتلیمخنخر خحهنخشهتهتاییلا دوست دارم'
-        # ok
-        , 'من منتلیمخنخرخحهنخشهتهتاییلا دوست دارم'
-        # [4,29]
-        , 'من تگنف دارم'
-        # [3,7]
-        , 'تفنگی دارم خوشگله ترش یکمی هست بهبه'
-        # [0,5]
-        , 'غستننتنیه شهر خیلی بدیه'
-        , 'قیر غابل غبول است هرفت!'
-    ]
-
-    illegals_test = [
-        'تفنگ',
-        # 'سیر',
-        'سیرجان',
-        'بی ادب',
-        'بی‌تربیت',
-        'چنگال',
-        'سرما',
-        'ترشی',
-        'ممد',
-        'غیرقابلقبول',
-        'قسطنتنیه',
-    ]
-
-    # tests = [
-    #     'میخوام برم به سیر‌جان',
-    # ]
-    #
-    # illegals_test = [
-    #     'سیر',
-    #     'سیرجان',
-    # ]
-
-    for test in tests:
-        print('\n**', test, '**')
-        out = run(test, illegals_test)
-        for item in out:
-            print(repr(item), ':', out[item])
-
-
-if __name__ == '__main__':
-    run_tests()
-    # print(is_false_positive('ترشی', 'ترشک'))
-    # print(run('من ترشی دوست دارم', ['ترشی', 'سیر', 'سیرجان', 'بی ادب', 'بی‌تربیت', 'چنگال', 'سرما', 'ترشی', 'ممد']))

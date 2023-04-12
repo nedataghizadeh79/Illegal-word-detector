@@ -1,11 +1,10 @@
 import datetime
-import tempfile
 from typing import List, Dict, Tuple, Annotated
-from fastapi import FastAPI, UploadFile, File, Form, Query, Body
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from illegal_word_finder import run as run_illegal_finder
 from pdf_reader_module import Pdf2txt
+from superduper_pipeline import run as run_illegal_finder
 
 
 class InputSchema(BaseModel):

@@ -37,7 +37,6 @@ def is_false_positive(token: str, illegal_word: str, persian_words: set) -> bool
     # check if word exists in the persian dictionary
     if token not in persian_words and \
             tools.edit_distance(token, illegal_word) < ILLEGAL_EDIT_DISTANCE_THRESHOLD:
-        # print("True positive: ", token)
         return False  # not false positive
 
     return True
@@ -95,10 +94,6 @@ def get_illegal_regex_for_integrated(illegal_words_list: List[str]) -> List[str]
     return word_regex_list
 
 
-# def clean_fp_integrated(dubiouses):
-#     return [dubious for dubious in dubiouses if is_false_positive(dubious[1], dubious[0])]
-
-
 def run(text: str, illegal_words: List[str]):
     persian_dictionary = tools.persian_words_dictionary
 
@@ -114,75 +109,3 @@ def run(text: str, illegal_words: List[str]):
     # TODO cleanup false positive for integrated!
     output = dubiouses_to_output(dubiouses + integrated_dubiouses)
     return output
-
-
-def run_tests():
-    tests = [
-        'من تر۲۲۲شی دوست دارم.'
-        # [3,9]
-        , 'من ترش23432ی دوست دارم'
-        # [3,11]
-        , 'من ت٫ریال^٪ریال&آٖۤآلبدذ رشی دوست دارم'
-        # ok
-        , 'من ت#$@رشی          دوست دارم'
-        # [3,19]
-        , 'من       ت                      ر                ش                      ی           دوست دارم'
-        # [3,83]
-        , 'من تررررررررررررررررررشششششی دوست دارم'
-        # [3,27]
-        , 'من ترش و شیرین دوست دارم'
-        # ok
-        , 'من ترشک دوست دارم'
-        # ok
-        , 'مراقب باش که سرمانخوری'
-        # ok
-        , 'سرمان به باد رفت'
-        # ok
-        , 'سر‌‌‌‌ما بد است!'  # multiple nim faseles!!
-        # [0, 9]
-        , 'سررررررررررمامان داد نزن'
-        # ok
-        , 'سرمامانداد نزن'
-        # ok
-        , 'من در سررم٫ااا میخواهم که تررر٪ش۰ی سییییـــــــر بخورم '
-        # [  [35,48] , [26,34] , [6,14] ]
-        , 'من#ترشی٫دوست@دارم'
-        , 'میخواهم برم به س‌ی‌ر‌ج‌ا‌ن.'
-        # [15,20]
-        , 'بیا بریم یه سSSیSerرجاfن'
-        # [12,22]
-        , 'من تف‌نگ میخوام.'
-        # [3,6]
-        , 'من تفنگ دوست دارم'
-        # [3,7]
-        , 'من منتلیمخنخر خحهنخشهتهتاییلا دوست دارم'
-        # ok
-        , 'من منتلیمخنخرخحهنخشهتهتاییلا دوست دارم'
-        # [4,29]
-    ]
-
-    illegals_test = [
-        'تفنگ',
-        'سیر',
-        'سیرجان',
-        'بی ادب',
-        'بی‌تربیت',
-        'چنگال',
-        'سرما',
-        'ترشی',
-        'ممد'
-    ]
-
-    for test in tests:
-        print('\n**', test, '**')
-        out = run(test, illegals_test)
-        for item in out:
-            print(repr(item), ':', out[item])
-
-
-if __name__ == '__main__':
-    run_tests()
-    # print(get_persian_similar_characters())
-    # print(edit_distance("آقا", "آبا"))
-    # print(re.match(ACCEPTABLE_PERSIAN_CHARS_REGEX, "!"))
-    # print(ACCEPTABLE_PERSIAN_CHARS_REGEX)
