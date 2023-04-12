@@ -11,14 +11,13 @@ def process_illegals(illegal_words: List[str]):
     char_groups = {}
     for char_list in similar_chars:
         for char in char_list:
-            char_groups.setdefault(char, []).append(char_list)
+            char_groups.setdefault(char, set()).update(char_list)
     # char_groups = {char: char_list for char_list in similar_chars for char in char_list}
-    print(char_groups)
     for illegal in illegal_words:
         regex = r'.*'
         for char in illegal:
             if char in char_groups:
-                regex += rf'[{"".join(char_groups[char])}]+.*'
+                regex += rf'[{"".join([c for c in char_groups[char]])}]+.*'
             else:
                 regex += rf'{char}+.*\s*'
                 # regexes[illegal]
