@@ -83,7 +83,6 @@ class Pdf2txt:
         self.replace_str([u'\ufdf2'], 'لله‌')
         self.replace_str([u'\u202a', u'\u202b', u'\u202c', u'\x0c'], '')
         self.replace_str([r'\(', r'\)', r'\[', r'\]', r'\«', r'\»'], '"')
-        self.replace_str(['-'], ' ')
 
         # letters = 'آ|ا|ب|پ|ت|ث|ج|چ|ح|خ|د|ذ|ر|ز|ژ|س|ش|ص|ض|ط|ظ|ع|غ|ف|ق|ک|گ|ل|م|ن|و|ه|ی|ي'
         # unicode_corrected = re.sub(r'([' + letters + r'])‌([' + letters + '])', r'\1==\2', unicode_corrected)
