@@ -135,7 +135,7 @@ def run_tests():
         # ok
         , 'سرمان به باد رفت'
         # ok
-          'سر‌‌‌‌ما بد است!'  # multiple nim faseles!!
+        , 'سر‌‌‌‌ما بد است!'  # multiple nim faseles!!
         # [0, 9]
         , 'سررررررررررمامان داد نزن'
         # ok

@@ -45,7 +45,6 @@ def run(text: str, illegals: List[str]):
     return dubious
 
 
-
 def run_tests():
     tests = [
         'من تر۲۲۲شی دوست دارم.'
@@ -68,7 +67,7 @@ def run_tests():
         # ok
         , 'سرمان به باد رفت'
         # ok
-          'سر‌‌‌‌ما بد است!'  # multiple nim faseles!!
+        , 'سر‌‌‌‌ما بد است!'  # multiple nim faseles!!
         # [0, 9]
         , 'سررررررررررمامان داد نزن'
         # ok
@@ -108,6 +107,7 @@ def run_tests():
         out = run(test, illegals_test)
         for item in out:
             print(repr(item), ':', out[item])
+
 
 if __name__ == '__main__':
     # t = "سلاااا!!!ام گ         ل سلام ابی مکرر چطوری  سلاام دادااااااا؟"
