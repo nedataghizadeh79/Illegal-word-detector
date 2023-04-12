@@ -9,6 +9,7 @@ import regex
 import yaml
 from strsimpy import WeightedLevenshtein
 
+NIM_FASELE_REGEX = r'[\u0020\u2000-\u200F\u2028-\u202F]'
 NON_PERSIAN_CHARS_REGEX = r'[^\u0621-\u064A|\u0686|\u0698|\u06A9|\u06af|\u06be|\u06c1|\u06c3]'
 VALID_PERSIAN_CHARS_REGEX = r'[\u0600-\u06FF\uFB50-\uFDFF\s]'
 INVALID_PERSIAN_CHARS_REGEX = r'[^\u0600-\u06FF\uFB50-\uFDFF\s]'

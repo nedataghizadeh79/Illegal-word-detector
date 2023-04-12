@@ -3,6 +3,8 @@ from typing import List, Tuple, Set, Dict
 
 import tools
 
+EDIT_DISTANCE_THRESHOLD = 4
+
 
 def process_illegals(illegal_words: List[str]):
     regexes = {}
@@ -11,20 +13,32 @@ def process_illegals(illegal_words: List[str]):
     char_groups = {}
     for char_list in similar_chars:
         for char in char_list:
-            char_groups.setdefault(char, []).append(char_list)
+            char_groups.setdefault(char, set()).update(char_list)
     # char_groups = {char: char_list for char_list in similar_chars for char in char_list}
-    print(char_groups)
     for illegal in illegal_words:
         regex = r'.*'
         for char in illegal:
             if char in char_groups:
-                regex += rf'[{"".join(char_groups[char])}]+.*'
+                regex += rf'[{"".join([c for c in char_groups[char]])}]+.*\s*{tools.NIM_FASELE_REGEX}*'
             else:
-                regex += rf'{char}+.*\s*'
+                regex += rf'{char}+.*\s*{tools.NIM_FASELE_REGEX}*'
                 # regexes[illegal]
         regexes[illegal] = regex
 
     return regexes
+
+
+def is_false_positive(illegal_word: str, token: str) -> bool:
+    # print(illegal_word, '  VS   ', token, end=' ')
+    if token == illegal_word:
+        return False
+    if token in tools.persian_words_dictionary:
+        return True
+    simple_illegal_word = tools.custom_simplifier(illegal_word)
+    simple_token = tools.custom_simplifier(token)
+    edit_distance = tools.edit_distance(simple_token, simple_illegal_word)
+    # print(' -> ', edit_distance)
+    return edit_distance > EDIT_DISTANCE_THRESHOLD
 
 
 def run(text: str, illegal_words: List[str]):
@@ -34,7 +48,7 @@ def run(text: str, illegal_words: List[str]):
     normal_word_list = tools.hazm_normalize(word_list)
 
     illegal_regexes = process_illegals(illegal_words)
-    fucks = {}
+    dubious = {}
 
     regex_combination = "(" + ")|(".join(illegal_regexes.values()) + ")"
 
@@ -52,11 +66,25 @@ def run(text: str, illegal_words: List[str]):
             bad_word_match = re.search(regex_combination, word)
             if bad_word_match:
                 captured_groups = bad_word_match.groups()
-                for i, group in enumerate(captured_groups):
-                    if group:
-                        fucks.setdefault(illegal_words[i], []).append((word, span))
+                for index, group in enumerate(captured_groups):
+                    if group and not is_false_positive(illegal_words[index], word):
+                        dubious.setdefault(illegal_words[index], []).append((word, span))
 
-    return fucks
+    # Handle overlapping spans -> choose the smallest one
+    for word, spans in dubious.items():
+        spans.sort(key=lambda x: x[1][1] - x[1][0])
+        new_spans = []
+        for span in spans:
+            if not new_spans:
+                new_spans.append(span)
+            else:
+                if new_spans[-1][1][1] >= span[1][0]:
+                    new_spans[-1] = (new_spans[-1][0], (new_spans[-1][1][0], span[1][1]))
+                else:
+                    new_spans.append(span)
+        dubious[word] = new_spans
+
+    return dubious
 
 
 def run_tests():
@@ -92,7 +120,7 @@ def run_tests():
         , 'من#ترشی٫دوست@دارم'
         , 'میخواهم برم به س‌ی‌ر‌ج‌ا‌ن.'
         # [15,20]
-        , 'بیا بریم یه سSSیSerرجاfن'
+        , 'بیا سیرجان بریم یه سSSیSerرجاfن'
         # [12,22]
         , 'من تف‌نگ میخوام.'
         # [3,6]
@@ -112,7 +140,7 @@ def run_tests():
 
     illegals_test = [
         'تفنگ',
-        'سیر',
+        # 'سیر',
         'سیرجان',
         'بی ادب',
         'بی‌تربیت',
@@ -125,11 +153,12 @@ def run_tests():
     ]
 
     # tests = [
-    #     'من#ترشی٫دوست@دارمگپچجژ',
+    #     'میخوام برم به سیر‌جان',
     # ]
-
+    #
     # illegals_test = [
-    #     'ترشی',
+    #     'سیر',
+    #     'سیرجان',
     # ]
 
     for test in tests:
@@ -141,4 +170,5 @@ def run_tests():
 
 if __name__ == '__main__':
     run_tests()
+    # print(is_false_positive('ترشی', 'ترشک'))
     # print(run('من ترشی دوست دارم', ['ترشی', 'سیر', 'سیرجان', 'بی ادب', 'بی‌تربیت', 'چنگال', 'سرما', 'ترشی', 'ممد']))
