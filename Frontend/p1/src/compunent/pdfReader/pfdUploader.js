@@ -1,14 +1,17 @@
+//in this component we want to get access for uploading pdf to our website.
+
 import React, { useState } from "react";
 import './pdfUploader.css'
-import IllegalWordsInput from "../getIllegalWords/illegalWordsInput";
 
 function UploadPDF() {
     const [file, setFile] = useState(null);
 
+    // we can accept a pdf then we should save it in our variable
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
 
+    // in this function we want handel send request to backend and also accept just pdf format (if you change .pfd to another format like .txt you can accept another formats)
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData();

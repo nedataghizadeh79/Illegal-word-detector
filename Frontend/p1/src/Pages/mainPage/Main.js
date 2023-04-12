@@ -1,3 +1,5 @@
+//this is the main page, we call our components that we want to show them in our main page.
+
 import './Main.css'
 import {useState} from "react";
 import axios from "axios";
@@ -9,6 +11,13 @@ const Main = ({saveIllegals}) => {
     const [mainInformation, setMainInformation] = useState({illegalWords: [], text: ""})
     const [showColoredResult, setShowColoredResult] = useState("")
 
+    // after you click in the related button, this function will call, we post the input value for backend then we can get the result
+    //we catch a json which it has illegal words in our text with their spans
+    //then we try to make some list that the fist element is the beginning of the numerical range,
+    // the second element is end of numerical range and the third element is the related illegal word
+    //then with the help of these lists we try to show the special words in text, we make red illegals words
+    // if you move your mouse over the red words, you can see which of the corresponding words is illegal.
+
     const processHandler = () => {
         setMainInformation(prevState => ({...prevState, text: textArea}));
         setMainInformation(pre => ({...pre, illegalWords: saveIllegals}))
@@ -18,6 +27,7 @@ const Main = ({saveIllegals}) => {
         }).then(function (response) {
 
             console.log(response.data.illegals);
+
             const illegalSpans = []
             for (const word in response.data.illegals) {
                 for (const span of response.data.illegals[word]) {
@@ -25,6 +35,7 @@ const Main = ({saveIllegals}) => {
                 }
             }
             console.log(illegalSpans);
+
             illegalSpans.sort((a, b) => a[0] - b[0])
 
             const result = [];

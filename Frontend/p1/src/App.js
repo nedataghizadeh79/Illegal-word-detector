@@ -13,6 +13,7 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <div className="App">
+                // welcome page contain Main page, after 2 seconds you will see main page and you can do your job.
                 <WelcomePage/>
             </div>
         </ThemeProvider>
