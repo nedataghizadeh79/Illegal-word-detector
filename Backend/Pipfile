@@ -4,11 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fastapi = "*"
+fastapi = "==0.95.0"
 uvicorn = {extras = ["standard"], version = "*"}
 strsimpy = "*"
 hazm = "*"
 regex = "*"
+textract = "*"
+python-multipart = "*"
 
 [dev-packages]
 

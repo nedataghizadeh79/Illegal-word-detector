@@ -10,7 +10,10 @@ class Pdf2txt:
         self.good_txt = ''
 
     def pdf2txt(self, pdf_path):
-        self.raw_txt = codecs.decode(textract.process(pdf_path))
+        textracted = textract.process(pdf_path)
+        print(textracted, "\n\n\n\n")
+        self.raw_txt = codecs.decode(textracted)
+        print(self.raw_txt, "\n\n\n\n")
         self.good_txt = self.raw_txt
         self.correct_unicodes()
         return self.good_txt
