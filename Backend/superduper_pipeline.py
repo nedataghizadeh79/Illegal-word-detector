@@ -84,20 +84,16 @@ def run(text: str, illegal_words: List[str]):
                 captured_groups = bad_word_match.groups()
                 for index, group in enumerate(captured_groups):
                     if group and not is_false_positive(illegal_words[index], word):
-                        dubious.setdefault(illegal_words[index], []).append((word, span))
-
-    # Handle overlapping spans -> choose the smallest one
-    for word, spans in dubious.items():
-        spans.sort(key=lambda x: x[1][1] - x[1][0])
-        new_spans = []
-        for span in spans:
-            if not new_spans:
-                new_spans.append(span)
-            else:
-                if new_spans[-1][1][1] >= span[1][0]:
-                    new_spans[-1] = (new_spans[-1][0], (new_spans[-1][1][0], span[1][1]))
-                else:
-                    new_spans.append(span)
-        dubious[word] = new_spans
+                        # check if the span is already captured
+                        if illegal_words[index] in dubious:
+                            for captured_span in [x[1] for x in dubious[illegal_words[index]]]:
+                                if captured_span[0] <= span[0] <= captured_span[1] or \
+                                        captured_span[0] <= span[1] <= captured_span[1]:
+                                    # if the span is already captured, then we don't need to add it again
+                                    break
+                            else:
+                                dubious.setdefault(illegal_words[index], []).append((word, span))
+                        else:
+                            dubious.setdefault(illegal_words[index], []).append((word, span))
 
     return dubious
