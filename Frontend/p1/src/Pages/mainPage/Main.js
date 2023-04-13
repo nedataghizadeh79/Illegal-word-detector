@@ -41,20 +41,6 @@ const Main = ({saveIllegals}) => {
         return result
     }
 
-    // useEffect(() => {
-    //     if (mainIllegalWords !== null && textArea !== null) {
-    //         axios.post('http://localhost:8080/run', {
-    //             illegal_words: mainIllegalWords,
-    //             text: textArea
-    //         }).then(function (response) {
-    //             return detect_reds(response);
-    //         }).catch(function (error) {
-    //             console.log(error);
-    //         })
-    //     }
-    // }, [mainIllegalWords])
-
-
     const processHandler = () => {
         // setMainInformation(prevState => ({...prevState, text: textArea}));
         // setMainInformation(pre => ({...pre, illegalWords: saveIllegals}))

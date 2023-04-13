@@ -6,6 +6,7 @@ import axios from "axios";
 
 function UploadPDF({saveIllegals}) {
     const [file, setFile] = useState(null);
+    const [pdfResponse , setPdfResponse] =useState([])
 
     // we can accept a pdf then we should save it in our variable
     const handleFileChange = (e) => {
@@ -26,27 +27,48 @@ function UploadPDF({saveIllegals}) {
     // in this function we want handel send request to backend and also accept just pdf format (if you change .pfd to another format like .txt you can accept another formats)
     const handleSubmit = (e) => {
         e.preventDefault();
-
         let formData = new FormData();
-
         formData.append("pdf_file", file);
-        formData.append('illegal_words' , saveIllegals)
+        formData.append("illegal_words" , saveIllegals)
         axios.post("http://localhost:8080/runpdf" , formData,{
             headers:{
                 "Content-Type": "multipart/form-data",
             }
-        } )
+        } ).then((response)=>{
+
+            let illegalsWordForPdfSpans = []
+
+            for(const word in response.data.illegals){
+                for (const span of response.data.illegals[word]){
+                    illegalsWordForPdfSpans.push([...span , word])
+                }
+            }
+            setPdfResponse(pre => [...pre , illegalsWordForPdfSpans])
+
+        }).catch((err)=>{
+            console.log(err)
+        })
     };
 
 
     return (
-        <div className='inputFileDiv'>
-        <form className='form' onSubmit={handleSubmit}>
-                <label className='uploadLabel' htmlFor="pdf-upload"> لطفا پی دی اف خود را جهت تصحیح بارگزاری کنید</label>
-                <input name='pdf_file' className='custom-file-upload' type="file" id="pdf-upload" onChange={handleFileChange} />
-                <button className='submitButtun' type="submit"> بارگذاری  </button>
-        </form>
+        <div>
+            <div className='inputFileDiv'>
+                <form className='form' onSubmit={handleSubmit}>
+                    <label className='uploadLabel' htmlFor="pdf-upload"> لطفا پی دی اف خود را جهت تصحیح بارگزاری کنید</label>
+                    <input name='pdf_file' className='custom-file-upload' type="file" id="pdf-upload" onChange={handleFileChange} />
+                    <button className='submitButtun' type="submit"> بارگذاری  </button>
+                </form>
+            </div>
+            <section style={{fontWeight:"bold"}}>
+                {
+
+                    //show spn
+                }
+            </section>
+
         </div>
+
     );
 }
 
