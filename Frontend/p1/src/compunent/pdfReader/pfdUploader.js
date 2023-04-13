@@ -77,7 +77,7 @@ function UploadPDF({saveIllegals}) {
                     : pdfResponse.map((item, index) => (
                         <div key={index}>
                             {item.map((val, i) => (
-                                <span key={i}> {val[2]} :  ({val[0]} ,{val[1]})
+                                <span key={i}> {val[2]} :  [{val[0]} ,{val[1]})
                             <br/>
                             </span>
                             ))
