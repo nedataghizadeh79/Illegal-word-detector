@@ -4,3 +4,13 @@
     align-items: center;
     justify-content: center;
 }
+
+.copyright{
+    color: #88b5fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+    padding-bottom: 10px;
+}

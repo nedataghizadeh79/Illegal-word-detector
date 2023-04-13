@@ -3,6 +3,7 @@
 import React, {useEffect, useState} from "react";
 import './pdfUploader.css'
 import axios from "axios";
+import {element} from "prop-types";
 
 function UploadPDF({saveIllegals}) {
     const [file, setFile] = useState(null);
@@ -60,13 +61,17 @@ function UploadPDF({saveIllegals}) {
                     <button className='submitButtun' type="submit"> بارگذاری  </button>
                 </form>
             </div>
-            <section style={{fontWeight:"bold"}}>
-                {
-
-                    //show spn
-                }
+            <section className='showSpansInPdf' >
+                {pdfResponse.map((item, index) => (
+                    <div key={index}>
+                        {item.map((val, i) => (
+                            <span key={i}> {val[2]} :  ({val[0]} ,{val[1]})
+                            <br/>
+                            </span>
+                        ))}
+                    </div>
+                ))}
             </section>
-
         </div>
 
     );

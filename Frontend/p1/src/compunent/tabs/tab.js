@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Main from "../../Pages/mainPage/Main";
 import UploadPDF from "../pdfReader/pfdUploader";
+import './tab.css'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -64,6 +65,11 @@ export default function BasicTabs({saveIllegals}) {
             <TabPanel value={value} index={1}>
                 <UploadPDF saveIllegals={saveIllegals}/>
             </TabPanel>
+            <div className='copyright'>
+                 تمامی حقوق این سایت متعلق به بانو ندا، مریم الملوک و سلطان الساعی می باشد.
+                <br/>
+                هرگونه کپی اشد مجازات و نفرین آمون را در پی  خواهد داشت.
+            </div>
         </Box>
     );
 }
