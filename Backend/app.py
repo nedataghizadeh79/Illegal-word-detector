@@ -1,4 +1,6 @@
 import datetime
+import shutil
+from io import StringIO
 from typing import List, Dict, Tuple, Annotated
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
@@ -41,20 +43,8 @@ async def run(inp: InputSchema) -> OutputSchema:
 async def run_pdf(pdf_file: Annotated[UploadFile, File(description="pdf file read as bytes")],
                   illegal_words: Annotated[str, Form()]) -> OutputSchema:
     with open(f"assets/test_pdfs/test_pdf_{datetime.datetime.now()}.pdf", "wb") as file:
-        contents = await pdf_file.read()
-        file.write(contents)
-        file.flush()
+        shutil.copyfileobj(pdf_file.file, file)
         text = Pdf2txt().pdf2txt(pdf_path=file.name)
         res = run_illegal_finder(text, illegal_words.split(','))
         output = {key: [x[1] for x in value] for key, value in res.items()}
         return OutputSchema(illegals=output)
-
-
-@app.post('/test_pdf')
-async def test(pdf_file: Annotated[UploadFile, File(description="pdf file read as bytes")]) -> str:
-    with open(f"assets/test_pdfs/test_pdf_{datetime.datetime.now()}.pdf", "wb") as file:
-        contents = await pdf_file.read()
-        file.write(contents)
-        file.flush()
-        text = Pdf2txt().pdf2txt(pdf_path=file.name)
-        return text
