@@ -66,7 +66,7 @@ export default function InputChips({setSaveIllegals}) {
                         marginBottom:"60px",
                         marginTop:"20px"
                     }}
-                    label="کلمات غیرقانونی را یکی یکی وارد نمایید"
+                    label="کلمات غیرمجاز را یکی یکی وارد کرده و پس از هر کلمه کلید Enter را فشار دهید."
                     value={inputValue}
                     onChange={handleInputChange}
                     onKeyDown={handleInputKeyDown}

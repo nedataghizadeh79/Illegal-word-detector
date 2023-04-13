@@ -33,8 +33,9 @@ const Main = ({saveIllegals}) => {
             result.push(textArea.slice(startIndex, span[0]))
             console.log(span)
             startIndex = span[1];
-            result.push(<Tooltip title={span[2]}>
-                <span style={{color: 'red'}}>{textArea.slice(span[0], span[1])}</span>
+            result.push(<Tooltip title={span[2]+ '(' + span[0] + ' , ' + span[1] + ')'}>
+                <span
+                    style={{color: 'red'}}>{textArea.slice(span[0], span[1]) }</span>
             </Tooltip>)
         })
         result.push(textArea.slice(startIndex))
@@ -46,7 +47,7 @@ const Main = ({saveIllegals}) => {
         // setMainInformation(prevState => ({...prevState, text: textArea}));
         // setMainInformation(pre => ({...pre, illegalWords: saveIllegals}))
         setMainIllegalWords(saveIllegals)
-        axios.post('http://localhost:8080/run', {
+        axios.post('http://localhost:8081/run', {
             illegal_words: saveIllegals,
             text: textArea
         }).then(function (response) {
@@ -64,7 +65,7 @@ const Main = ({saveIllegals}) => {
     return (
         <div className='main'>
             <section className='textareaSection'>
-                <label className='textLabel'>در این قسمت متن خود را به فارسی وارد نمایید</label>
+                <label className='textLabel'>متن فارسی جهت تشخیص کلمات غیر مجاز را وارد نمایید:</label>
                 <textarea className='ta' onChange={textAreaHandler} value={textArea}/>
                 <button onClick={processHandler} className='submitBtn'>پردازش</button>
                 <div className='showRedText'>

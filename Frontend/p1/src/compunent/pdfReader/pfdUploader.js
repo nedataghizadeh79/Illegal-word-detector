@@ -31,7 +31,7 @@ function UploadPDF({saveIllegals}) {
         let formData = new FormData();
         formData.append("pdf_file", file);
         formData.append("illegal_words" , saveIllegals)
-        axios.post("http://localhost:8080/runpdf" , formData,{
+        axios.post("http://localhost:8081/runpdf" , formData,{
             // we want to send .pdf then it will send ad binary format
             headers:{
                 "Content-Type": "multipart/form-data",
@@ -56,9 +56,9 @@ function UploadPDF({saveIllegals}) {
         <div>
             <div className='inputFileDiv'>
                 <form className='form' onSubmit={handleSubmit}>
-                    <label className='uploadLabel' htmlFor="pdf-upload"> لطفا پی دی اف خود را جهت تصحیح بارگزاری کنید</label>
+                    <label className='uploadLabel' htmlFor="pdf-upload">فایل PDF جهت تشخیص کلمات غیر مجاز را بارگذاری نمایید:</label>
                     <input name='pdf_file' className='custom-file-upload' type="file" id="pdf-upload" onChange={handleFileChange} />
-                    <button className='submitButtun' type="submit"> بارگذاری  </button>
+                    <button className='submitButtun' type="submit"> بارگذاری و پردازش  </button>
                 </form>
             </div>
             {/* we want to show each spans that they are in pdf, so we need 2 map to iterate elements */}

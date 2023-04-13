@@ -56,8 +56,8 @@ export default function BasicTabs({saveIllegals}) {
         <Box sx={{ width: '100%', direction:'rtl' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' ,display:"flex" , alignItems:"center" , justifyContent:"center" }}>
                 <Tabs sx={{ display:"flex" , alignItems:"center" , justifyContent:"center" }} value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab sx={{ color:"#2B468B", fontWeight:"bold" , fontSize:"16px" }} label="ورودی متن" {...a11yProps(0)} />
-                    <Tab  sx={{ color:"#2B468B", fontWeight:"bold" , fontSize:"16px" }} label="ورودی PDF" {...a11yProps(1)} />
+                    <Tab sx={{ color:"#2B468B", fontWeight:"bold" , fontSize:"16px" }} label="ورود متن" {...a11yProps(0)} />
+                    <Tab  sx={{ color:"#2B468B", fontWeight:"bold" , fontSize:"16px" }} label="بارگذاری فایل PDF" {...a11yProps(1)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
