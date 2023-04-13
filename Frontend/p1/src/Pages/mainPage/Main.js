@@ -36,7 +36,7 @@ const Main = ({saveIllegals}) => {
             result.push(textArea.slice(startIndex, span[0]))
             console.log(span)
             startIndex = span[1];
-            result.push(<Tooltip title={span[2] + '(' + span[0] + ' , ' + span[1] + ')'}>
+            result.push(<Tooltip title={span[2] + '[' + span[0] + ' , ' + span[1] + ')'}>
                 <span
                     style={{color: 'red'}}>{textArea.slice(span[0], span[1])}</span>
             </Tooltip>)
