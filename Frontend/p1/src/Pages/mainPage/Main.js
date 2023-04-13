@@ -5,12 +5,15 @@ import {useState} from "react";
 import axios from "axios";
 import * as React from 'react';
 import Tooltip from '@mui/material/Tooltip';
+import {CircularProgress} from "@mui/material";
+import Box from "@mui/material/Box";
 
 const Main = ({saveIllegals}) => {
     const [textArea, setTextArea] = useState('')
     const [mainIllegalWords, setMainIllegalWords] = useState([])
 
     const [showColoredResult, setShowColoredResult] = useState("")
+    const [processing, setProcessing] = useState(false)
 
     // after you click in the related button, this function will call, we post the input value for backend then we can get the result
     //we catch a json which it has illegal words in our text with their spans
@@ -33,20 +36,24 @@ const Main = ({saveIllegals}) => {
             result.push(textArea.slice(startIndex, span[0]))
             console.log(span)
             startIndex = span[1];
-            result.push(<Tooltip title={span[2]}>
-                <span style={{color: 'red'}}>{textArea.slice(span[0], span[1])}</span>
+            result.push(<Tooltip title={span[2] + '(' + span[0] + ' , ' + span[1] + ')'}>
+                <span
+                    style={{color: 'red'}}>{textArea.slice(span[0], span[1])}</span>
             </Tooltip>)
         })
         result.push(textArea.slice(startIndex))
+
         setShowColoredResult(result)
+        setProcessing(false)
         return result
     }
 
     const processHandler = () => {
+        setProcessing(true)
         // setMainInformation(prevState => ({...prevState, text: textArea}));
         // setMainInformation(pre => ({...pre, illegalWords: saveIllegals}))
         setMainIllegalWords(saveIllegals)
-        axios.post('http://localhost:8080/run', {
+        axios.post('http://localhost:8081/run', {
             illegal_words: saveIllegals,
             text: textArea
         }).then(function (response) {
@@ -64,11 +71,16 @@ const Main = ({saveIllegals}) => {
     return (
         <div className='main'>
             <section className='textareaSection'>
-                <label className='textLabel'>در این قسمت متن خود را به فارسی وارد نمایید</label>
+                <label className='textLabel'>متن فارسی جهت تشخیص کلمات غیر مجاز را وارد نمایید:</label>
                 <textarea className='ta' onChange={textAreaHandler} value={textArea}/>
                 <button onClick={processHandler} className='submitBtn'>پردازش</button>
                 <div className='showRedText'>
-                    {showColoredResult}
+                    {processing ?
+                        <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                            <CircularProgress size={100}/>
+                        </Box>
+                        : showColoredResult
+                    }
                 </div>
             </section>
         </div>

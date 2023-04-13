@@ -56,6 +56,7 @@ export default function InputChips({setSaveIllegals}) {
         <section dir='rtl'>
             <Box sx={{display: "flex",direction:"rtl", alignItems: "center", justifyContent: "center", flexDirection:"column"}}>
                 <TextField
+                    variant="filled"
                     // in mui we can add css by sx
                     sx={{
                         direction:"rtl",
@@ -66,15 +67,10 @@ export default function InputChips({setSaveIllegals}) {
                         marginBottom:"60px",
                         marginTop:"20px"
                     }}
-                    label="کلمات غیرقانونی را یکی یکی وارد نمایید"
+                    label="کلمات غیرمجاز را وارد کرده و پس از هر کلمه Enter را فشار دهید."
                     value={inputValue}
                     onChange={handleInputChange}
                     onKeyDown={handleInputKeyDown}
-                    InputLabelProps={{
-                        sx: {
-                            direction:"rtl",  textAlign: 'center' , padding:"5px"
-                        }
-                    }}
                 />
 
                 <Stack direction="row" spacing={2} sx={{ marginBottom:"50px" }} >

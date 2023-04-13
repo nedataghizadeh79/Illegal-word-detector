@@ -43,10 +43,14 @@ def _get_persian_words_dictionary():
 persian_words_dictionary = _get_persian_words_dictionary()
 
 
-def get_persian_similar_characters():
+def _get_persian_similar_characters():
     with open("assets/persian_char_groups.yml", 'r', encoding='utf-8') as f:
-        chars_lists = yaml.safe_load(f)
-        return [set(cl) for cl in chars_lists]
+        content = yaml.safe_load(f)
+        chars_lists = content.get('groups')
+        optional_chars = content.get('optionals')
+        return [set(cl) for cl in chars_lists], optional_chars
+
+persian_char_groups, persian_optional_chars = _get_persian_similar_characters()
 
 
 def hazm_normalize(word_list):
@@ -73,7 +77,7 @@ def tokenize(normal_string):
 
 
 def edit_distance(s1, s2):
-    persian_similar_characters = get_persian_similar_characters()
+    persian_similar_characters = persian_char_groups
 
     def insertion_cost(char):
         if not re.match(NON_PERSIAN_CHARS_REGEX, char):
@@ -81,6 +85,8 @@ def edit_distance(s1, s2):
         return 0.1
 
     def deletion_cost(char):
+        if char in persian_optional_chars:
+            return 0.5
         if not re.match(NON_PERSIAN_CHARS_REGEX, char):
             return 2.0
         return 0.1
