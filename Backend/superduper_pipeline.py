@@ -1,11 +1,11 @@
 import re
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import tools
 
 EDIT_DISTANCE_THRESHOLD = 4
 
 
-def process_illegals(illegal_words: List[str]) -> Dict[str, str]:
+def process_illegals(illegal_words: List[str]) -> Tuple[Dict[str, str], Dict[str, str]]:
     """
     This function turns each illegal word into a regex that can be used to find it in a text.
     Args:
@@ -15,7 +15,9 @@ def process_illegals(illegal_words: List[str]) -> Dict[str, str]:
 
     """
     regexes = {}
-    similar_chars = tools.get_persian_similar_characters()
+    shuffled_regexes = {}
+    similar_chars = tools.persian_char_groups
+    optional_chars = set(tools.persian_optional_chars)
 
     char_groups = {}
     for char_list in similar_chars:
@@ -25,15 +27,23 @@ def process_illegals(illegal_words: List[str]) -> Dict[str, str]:
         regex = r'.*'
         for char in illegal:
             if char in char_groups:
-                regex += rf'[{"".join([c for c in char_groups[char]])}]+.*\s*{tools.NIM_FASELE_REGEX}*'
+                regex += rf'[' \
+                         rf'{"".join([c for c in char_groups[char]])}' \
+                         rf']{"*" if char in optional_chars else "+"}' \
+                         rf'.*\s*{tools.NIM_FASELE_REGEX}*'
+            elif char in optional_chars:
+                regex += rf'{char}*.*\s*{tools.NIM_FASELE_REGEX}*'
             else:
                 regex += rf'{char}+.*\s*{tools.NIM_FASELE_REGEX}*'
         regexes[illegal] = regex
 
-    return regexes
+        second_regex = rf'.*[{illegal}]{{{len(illegal)}}}.*'
+        shuffled_regexes[illegal] = second_regex
+
+    return regexes, shuffled_regexes
 
 
-def is_false_positive(illegal_word: str, token: str) -> bool:
+def is_false_positive(illegal_word: str, token: str, is_shuffled: bool = False) -> bool:
     """
     This function checks if a token has been recognized as an illegal word by mistake or not.
     It does so by checking if the token is a correct persian word or not.
@@ -54,7 +64,7 @@ def is_false_positive(illegal_word: str, token: str) -> bool:
     simple_illegal_word = tools.custom_simplifier(illegal_word)
     simple_token = tools.custom_simplifier(token)
     edit_distance = tools.edit_distance(simple_token, simple_illegal_word)
-    return edit_distance > EDIT_DISTANCE_THRESHOLD
+    return edit_distance > (len(illegal_word) * 2 if is_shuffled else EDIT_DISTANCE_THRESHOLD)
 
 
 def run(text: str, illegal_words: List[str]):
@@ -65,12 +75,13 @@ def run(text: str, illegal_words: List[str]):
     normal_word_list = tools.hazm_normalize(word_list)
 
     # Turn each illegal word into a regex
-    illegal_regexes = process_illegals(illegal_words)
+    illegal_regexes, illegal_shuffled_regexes = process_illegals(illegal_words)
 
     # Final output
     dubious = {}
 
     regex_combination = "(" + ")|(".join(illegal_regexes.values()) + ")"
+    shuffled_regex_combination = "(" + ")|(".join(illegal_shuffled_regexes.values()) + ")"
 
     for token_count in range(1, 6):
 
@@ -79,11 +90,21 @@ def run(text: str, illegal_words: List[str]):
             word = ''.join(token_values[i:i + token_count])
             span = token_ranges[i][0], token_ranges[i + token_count - 1][1]
 
+            captured_groups = None
+            is_shuffled = False
+
             bad_word_match = re.search(regex_combination, word)
             if bad_word_match:
                 captured_groups = bad_word_match.groups()
+            else:
+                bad_word_match = re.search(shuffled_regex_combination, word)
+                if bad_word_match:  # if the word is shuffled
+                    captured_groups = bad_word_match.groups()
+                    is_shuffled = True
+
+            if captured_groups:
                 for index, group in enumerate(captured_groups):
-                    if group and not is_false_positive(illegal_words[index], word):
+                    if group and not is_false_positive(illegal_words[index], word, is_shuffled):
                         # check if the span is already captured
                         if illegal_words[index] in dubious:
                             for captured_span in [x[1] for x in dubious[illegal_words[index]]]:
