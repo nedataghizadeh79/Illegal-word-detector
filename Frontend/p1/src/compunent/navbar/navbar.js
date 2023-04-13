@@ -1,6 +1,6 @@
 //in this component we have just a section that it contains a picture with a paragraph.
 
-import mainPagePic from "../../assets/pictures/mainPic.jpg";
+import mainPagePic from "../../assets/pictures/mainPic.png";
 import './navbar.css'
 
 const Navbar=()=>{
