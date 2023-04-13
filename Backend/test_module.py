@@ -92,6 +92,7 @@ test3 = (
 )
 
 
+
 def run_tests(pipeline: callable):
     tests = [test1, test2]
     for test_index, (test_texts, illegals) in enumerate(tests):
