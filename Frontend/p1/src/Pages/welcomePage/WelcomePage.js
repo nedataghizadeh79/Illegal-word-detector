@@ -6,14 +6,16 @@ import TabPanel from '../../compunent/tabs/tab'
 import IllegalWordsInput from "../../compunent/getIllegalWords/illegalWordsInput";
 
 const WelcomePage = () => {
-    // at first the display variable is true, it means you can see welcome page, after 2 seconds it will be false then you will see main page.
+    // at first the display variable is true, it means you can see welcome page,
+    // after 2 seconds it will be false then you will see main page.
     const [display, setDisplay] = useState(true)
     const [saveIllegals , setSaveIllegals ] = useState([])
 
+    //after 2 seconds we make it false by useEffect
     useEffect(() => {
         const timer = setTimeout(() => {
             setDisplay(false)
-        }, 100)
+        }, 2000)
     }, [])
 
     return (
@@ -22,6 +24,7 @@ const WelcomePage = () => {
                 display ? <section className='welcomePage'>
                     </section> :
                     <div className='divContainer'>
+                        {/*/now we call our components*/}
                         <Navbar/>
                         <IllegalWordsInput setSaveIllegals ={setSaveIllegals}/>
                         <TabPanel saveIllegals={saveIllegals}/>

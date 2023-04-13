@@ -6,6 +6,7 @@ import './navbar.css'
 const Navbar=()=>{
     return(
         <div className='cotainer'>
+            {/* in this section we just show img and paragraph */}
             <section className='firstPart'>
                 <img src={mainPagePic} alt='firs pic' className='pic'/>
                 <p className='pRightSide' dir='rtl'>
