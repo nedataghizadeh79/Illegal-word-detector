@@ -50,8 +50,11 @@ async def run_pdf(pdf_file: Annotated[UploadFile, File(description="pdf file rea
         return OutputSchema(illegals=output)
 
 
-@app.get('/test')
-async def test():
-    return {
-        "message": "OK!"
-    }
+@app.post('/test_pdf')
+async def test(pdf_file: Annotated[UploadFile, File(description="pdf file read as bytes")]) -> str:
+    with open(f"assets/test_pdfs/test_pdf_{datetime.datetime.now()}.pdf", "wb") as file:
+        contents = await pdf_file.read()
+        file.write(contents)
+        file.flush()
+        text = Pdf2txt().pdf2txt(pdf_path=file.name)
+        return text

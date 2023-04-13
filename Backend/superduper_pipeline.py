@@ -59,12 +59,18 @@ def is_false_positive(illegal_word: str, token: str, is_shuffled: bool = False) 
     """
     if tools.hazm_lemmatize(token) == tools.hazm_lemmatize(illegal_word):
         return False
-    if token in tools.persian_words_dictionary:
+    for token_part in token.split(' '):
+        # print(token_part)
+        if token_part not in tools.persian_words_dictionary:
+            break
+    else:
         return True
+    if illegal_word in token:
+        return False
     simple_illegal_word = tools.custom_simplifier(illegal_word)
     simple_token = tools.custom_simplifier(token)
     edit_distance = tools.edit_distance(simple_token, simple_illegal_word)
-    return edit_distance > (len(illegal_word) * 2 if is_shuffled else EDIT_DISTANCE_THRESHOLD)
+    return edit_distance > EDIT_DISTANCE_THRESHOLD * (len(illegal_word) if is_shuffled else 1)
 
 
 def run(text: str, illegal_words: List[str]):
@@ -87,7 +93,7 @@ def run(text: str, illegal_words: List[str]):
 
         token_values, token_ranges = [list(i) for i in zip(*normal_word_list)]
         for i in range(len(token_values) - token_count + 1):
-            word = ''.join(token_values[i:i + token_count])
+            word = ' '.join(token_values[i:i + token_count])
             span = token_ranges[i][0], token_ranges[i + token_count - 1][1]
 
             captured_groups = None
@@ -108,8 +114,7 @@ def run(text: str, illegal_words: List[str]):
                         # check if the span is already captured
                         if illegal_words[index] in dubious:
                             for captured_span in [x[1] for x in dubious[illegal_words[index]]]:
-                                if captured_span[0] <= span[0] <= captured_span[1] or \
-                                        captured_span[0] <= span[1] <= captured_span[1]:
+                                if captured_span[0] <= span[1] and captured_span[1] >= span[0]:
                                     # if the span is already captured, then we don't need to add it again
                                     break
                             else:
