@@ -27,26 +27,28 @@ export default function InputChips({setSaveIllegals}) {
 
     //when we write sth in our input, then we press Enter key, this function will call.
     const handleInputKeyDown = (event) => {
+
         if (event.key === 'Enter') {
             event.preventDefault();
             const value = inputValue.trim();
             setAllInputValue([...allInputValue, value]);
+            console.log(value)
             if (value) {
                 const newChips = value.split(',').map((val) => ({ label: val.trim() }));
                 setChips([...chips, ...newChips]);
             }
             setSaveIllegals(allInputValue)
+            setSaveIllegals((pre)=>[...pre , value])
             setInputValue('');
         }
     };
 
     // when you delete chips, also it's values should delete from our list.
     const handleChipDelete = (chipToDelete) => () => {
-        const chipIndex = allInputValue.findIndex((chip) => chip === chipToDelete);
-        const newChips = [...allInputValue];
+        let chipIndex = allInputValue.findIndex((chip) => chip === chipToDelete);
+        let newChips = [...allInputValue];
         newChips.splice(chipIndex, 1);
-        setAllInputValue(newChips);
-        const updatedChips = chips.filter((chip) => chip !== chipToDelete);
+        let updatedChips = chips.filter((chip) => chip !== chipToDelete);
         setChips(updatedChips);
     };
 
