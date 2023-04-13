@@ -5,7 +5,7 @@ import tools
 EDIT_DISTANCE_THRESHOLD = 4
 
 
-def process_illegals(illegal_words: List[str]) -> Tuple[Dict[str, str], Dict[str, str]]:
+def process_illegals(illegal_words: List[str]) -> Dict[str, str]:
     """
     This function turns each illegal word into a regex that can be used to find it in a text.
     Args:
@@ -37,10 +37,7 @@ def process_illegals(illegal_words: List[str]) -> Tuple[Dict[str, str], Dict[str
                 regex += rf'{char}+.*\s*{tools.NIM_FASELE_REGEX}*'
         regexes[illegal] = regex
 
-        second_regex = rf'.*[{illegal}]{{{len(illegal)}}}.*'
-        shuffled_regexes[illegal] = second_regex
-
-    return regexes, shuffled_regexes
+    return regexes
 
 
 def is_false_positive(illegal_word: str, token: str, is_shuffled: bool = False) -> bool:
@@ -81,13 +78,13 @@ def run(text: str, illegal_words: List[str]):
     normal_word_list = tools.hazm_normalize(word_list)
 
     # Turn each illegal word into a regex
-    illegal_regexes, illegal_shuffled_regexes = process_illegals(illegal_words)
+    illegal_regexes = process_illegals(illegal_words)
+    illegals_sets = [set(illegal_word) for illegal_word in illegal_words]
 
     # Final output
     dubious = {}
 
     regex_combination = "(" + ")|(".join(illegal_regexes.values()) + ")"
-    shuffled_regex_combination = "(" + ")|(".join(illegal_shuffled_regexes.values()) + ")"
 
     for token_count in range(1, 6):
 
@@ -96,30 +93,37 @@ def run(text: str, illegal_words: List[str]):
             word = ' '.join(token_values[i:i + token_count])
             span = token_ranges[i][0], token_ranges[i + token_count - 1][1]
 
-            captured_groups = None
-            is_shuffled = False
-
             bad_word_match = re.search(regex_combination, word)
             if bad_word_match:
                 captured_groups = bad_word_match.groups()
-            else:
-                bad_word_match = re.search(shuffled_regex_combination, word)
-                if bad_word_match:  # if the word is shuffled
-                    captured_groups = bad_word_match.groups()
-                    is_shuffled = True
 
-            if captured_groups:
                 for index, group in enumerate(captured_groups):
-                    if group and not is_false_positive(illegal_words[index], word, is_shuffled):
-                        # check if the span is already captured
+                    if group and not is_false_positive(illegal_words[index], word, False):
                         if illegal_words[index] in dubious:
                             for captured_span in [x[1] for x in dubious[illegal_words[index]]]:
                                 if captured_span[0] <= span[1] and captured_span[1] >= span[0]:
+                                    # check if the span is already captured,
                                     # if the span is already captured, then we don't need to add it again
                                     break
                             else:
                                 dubious.setdefault(illegal_words[index], []).append((word, span))
                         else:
                             dubious.setdefault(illegal_words[index], []).append((word, span))
+
+            else:
+                if word in tools.persian_words_dictionary:
+                    continue
+                charset = set(word)
+                for illegal, illegal_set in zip(illegal_words, illegals_sets):
+                    if charset.issubset(illegal_set):
+                        if not is_false_positive(illegal, word, True):
+                            if illegal in dubious:
+                                for captured_span in [x[1] for x in dubious[illegal]]:
+                                    if captured_span[0] <= span[1] and captured_span[1] >= span[0]:
+                                        break
+                                else:
+                                    dubious.setdefault(illegal, []).append((word, span))
+                            else:
+                                dubious.setdefault(illegal, []).append((word, span))
 
     return dubious

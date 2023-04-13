@@ -3,7 +3,7 @@ services:
   backend:
     build: ./Backend
     ports:
-      - "8080:80"
+      - "8081:80"
   frontend:
     build: ./Frontend/p1
     ports:
