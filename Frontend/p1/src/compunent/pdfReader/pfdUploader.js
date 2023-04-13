@@ -3,11 +3,14 @@
 import React, {useEffect, useState} from "react";
 import './pdfUploader.css'
 import axios from "axios";
+import Box from "@mui/material/Box";
+import {CircularProgress} from "@mui/material";
 
 function UploadPDF({saveIllegals}) {
     // we can save our data in these useStates
     const [file, setFile] = useState(null);
-    const [pdfResponse , setPdfResponse] =useState([])
+    const [pdfResponse, setPdfResponse] = useState([])
+    const [processing, setProcessing] = useState(false)
 
     // inside the function, it extracts the first file from the array of files uploaded using the e event object's target
     //  property which refers to the element that triggered the event (in this case, an input element with type="file").
@@ -28,25 +31,27 @@ function UploadPDF({saveIllegals}) {
     // (if you change .pfd to another format like .txt you can accept another formats)
     const handleSubmit = (e) => {
         e.preventDefault();
+        setProcessing(true)
         let formData = new FormData();
         formData.append("pdf_file", file);
-        formData.append("illegal_words" , saveIllegals)
-        axios.post("http://localhost:8081/runpdf" , formData,{
+        formData.append("illegal_words", saveIllegals)
+        axios.post("http://localhost:8081/runpdf", formData, {
             // we want to send .pdf then it will send ad binary format
-            headers:{
+            headers: {
                 "Content-Type": "multipart/form-data",
             }
-        } ).then((response)=>{
+        }).then((response) => {
 
             let illegalsWordForPdfSpans = []
             // we want to get each element that they are in our response, then we can make an array like [ begining of span , end of span , the illegals word ]
-            for(const word in response.data.illegals){
-                for (const span of response.data.illegals[word]){
-                    illegalsWordForPdfSpans.push([...span , word])
+            for (const word in response.data.illegals) {
+                for (const span of response.data.illegals[word]) {
+                    illegalsWordForPdfSpans.push([...span, word])
                 }
             }
-            setPdfResponse(pre => [...pre , illegalsWordForPdfSpans])
-        }).catch((err)=>{
+            setPdfResponse(pre => [...pre, illegalsWordForPdfSpans])
+            setProcessing(false)
+        }).catch((err) => {
             console.log(err)
         })
     };
@@ -56,22 +61,29 @@ function UploadPDF({saveIllegals}) {
         <div>
             <div className='inputFileDiv'>
                 <form className='form' onSubmit={handleSubmit}>
-                    <label className='uploadLabel' htmlFor="pdf-upload">فایل PDF جهت تشخیص کلمات غیر مجاز را بارگذاری نمایید:</label>
-                    <input name='pdf_file' className='custom-file-upload' type="file" id="pdf-upload" onChange={handleFileChange} />
-                    <button className='submitButtun' type="submit"> بارگذاری و پردازش  </button>
+                    <label className='uploadLabel' htmlFor="pdf-upload">فایل PDF جهت تشخیص کلمات غیر مجاز را بارگذاری
+                        نمایید:</label>
+                    <input name='pdf_file' className='custom-file-upload' type="file" id="pdf-upload"
+                           onChange={handleFileChange}/>
+                    <button className='submitButtun' type="submit"> بارگذاری و پردازش</button>
                 </form>
             </div>
             {/* we want to show each spans that they are in pdf, so we need 2 map to iterate elements */}
-            <section className='showSpansInPdf' >
-                {pdfResponse.map((item, index) => (
-                    <div key={index}>
-                        {item.map((val, i) => (
-                            <span key={i}> {val[2]} :  ({val[0]} ,{val[1]})
+            <section className='showSpansInPdf'>
+                {processing ?
+                    <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                        <CircularProgress size={100}/>
+                    </Box>
+                    : pdfResponse.map((item, index) => (
+                        <div key={index}>
+                            {item.map((val, i) => (
+                                <span key={i}> {val[2]} :  ({val[0]} ,{val[1]})
                             <br/>
                             </span>
-                        ))}
-                    </div>
-                ))}
+                            ))
+                            }
+                        </div>
+                    ))}
             </section>
         </div>
 
