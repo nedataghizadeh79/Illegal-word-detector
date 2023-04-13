@@ -3,6 +3,7 @@ import WelcomePage from "./Pages/welcomePage/WelcomePage";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 
 const theme = createTheme({
+    //set the font style and it's direction.
     typography: {
         fontFamily: 'Vazirmatn',
     },

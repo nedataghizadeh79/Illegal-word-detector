@@ -26,13 +26,13 @@ export default function InputChips({setSaveIllegals}) {
 
 
     //when we write sth in our input, then we press Enter key, this function will call.
-
-
     const handleInputKeyDown = (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
             const value = inputValue.trim();
             setAllInputValue([...allInputValue, value]);
+
+            // if we have value we can put their values in our chips
             if (value) {
                 const newChips = value.split(",").map((val) => ({ label: val.trim() }));
                 setChips([...chips, ...newChips]);
@@ -42,20 +42,21 @@ export default function InputChips({setSaveIllegals}) {
         }
     };
 
+    // if we delete chips, we should delete its value from allInputValue list
     const handleChipDelete = (chipToDelete) => () => {
         const filteredChips = chips.filter((chip) => chip !== chipToDelete);
         setChips(filteredChips);
-
         const filteredSaveIllegals = allInputValue.filter((val) => val !== chipToDelete.label);
         setSaveIllegals(filteredSaveIllegals);
         setAllInputValue(filteredSaveIllegals);
     };
 
-
+    // now we have an input that we can give the illegals word from the input and convert them to chips and save them in list
     return (
         <section dir='rtl'>
             <Box sx={{display: "flex",direction:"rtl", alignItems: "center", justifyContent: "center", flexDirection:"column"}}>
                 <TextField
+                    // in mui we can add css by sx
                     sx={{
                         direction:"rtl",
                         border: "none",
@@ -81,7 +82,7 @@ export default function InputChips({setSaveIllegals}) {
                         <Chip
                             key={index}
                             label={chip.label}
-                            // when you press x icon on chips, it will delete
+                            // when you press X icon on chips, it will delete.
                             onDelete={handleChipDelete(chip)}
                         />
                     ))}

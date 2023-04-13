@@ -31,6 +31,7 @@ const Main = ({saveIllegals}) => {
         let startIndex = 0;
         illegalSpans.forEach(span => {
             result.push(textArea.slice(startIndex, span[0]))
+            console.log(span)
             startIndex = span[1];
             result.push(<Tooltip title={span[2]}>
                 <span style={{color: 'red'}}>{textArea.slice(span[0], span[1])}</span>
@@ -58,6 +59,7 @@ const Main = ({saveIllegals}) => {
     const textAreaHandler = (event) => {
         setTextArea(event.target.value)
     }
+    console.log(showColoredResult)
 
     return (
         <div className='main'>

@@ -1,4 +1,4 @@
-//in this component we have just a section that it contains a picture with a paragraph.
+//in this component we have just a section that it contains a picture with a paragraph
 
 import mainPagePic from "../../assets/pictures/mainPic.png";
 import './navbar.css'
@@ -6,6 +6,7 @@ import './navbar.css'
 const Navbar=()=>{
     return(
         <div className='cotainer'>
+            {/* in this section we just show img and paragraph */}
             <section className='firstPart'>
                 <img src={mainPagePic} alt='firs pic' className='pic'/>
                 <p className='pRightSide' dir='rtl'>
