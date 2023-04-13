@@ -45,7 +45,6 @@ function UploadPDF({saveIllegals}) {
                 }
             }
             setPdfResponse(pre => [...pre , illegalsWordForPdfSpans])
-
         }).catch((err)=>{
             console.log(err)
         })
@@ -61,6 +60,7 @@ function UploadPDF({saveIllegals}) {
                     <button className='submitButtun' type="submit"> بارگذاری  </button>
                 </form>
             </div>
+            {/* we want to show each spans that they are in pdf, so we need 2 map to iterate elements */}
             <section className='showSpansInPdf' >
                 {pdfResponse.map((item, index) => (
                     <div key={index}>

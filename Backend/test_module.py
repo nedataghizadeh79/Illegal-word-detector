@@ -91,8 +91,6 @@ test3 = (
     ]
 )
 
-
-
 def run_tests(pipeline: callable):
     tests = [test1, test2]
     for test_index, (test_texts, illegals) in enumerate(tests):
@@ -108,3 +106,4 @@ if __name__ == '__main__':
     run_tests(superduper_run)
     # run_tests(legacy_run)
     # run_tests(normalizer_run)
+
