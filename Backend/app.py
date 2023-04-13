@@ -1,6 +1,6 @@
 import datetime
 from typing import List, Dict, Tuple, Annotated
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pdf_reader_module import Pdf2txt
@@ -39,14 +39,15 @@ async def run(inp: InputSchema) -> OutputSchema:
 
 @app.post("/runpdf")
 async def run_pdf(pdf_file: Annotated[UploadFile, File(description="pdf file read as bytes")],
-                  illegal_words: list[str]) -> OutputSchema:
+                  illegal_words: Annotated[str, Form()]) -> OutputSchema:
     with open(f"assets/test_pdfs/test_pdf_{datetime.datetime.now()}.pdf", "wb") as file:
         contents = await pdf_file.read()
         file.write(contents)
         file.flush()
         text = Pdf2txt().pdf2txt(pdf_path=file.name)
-        res = run_illegal_finder(text, illegal_words)
-        return OutputSchema(illegals=res)
+        res = run_illegal_finder(text, illegal_words.split(','))
+        output = {key: [x[1] for x in value] for key, value in res.items()}
+        return OutputSchema(illegals=output)
 
 
 @app.get('/test')
