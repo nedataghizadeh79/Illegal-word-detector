@@ -13,7 +13,6 @@ export default function InputChips({setSaveIllegals}) {
     const [chips, setChips] = useState([]);
 
     //when we change our input this function save the changes and new inputs.
-
     useEffect(() => {
         const timer = setTimeout(() => {
         }, 300)
@@ -56,7 +55,6 @@ export default function InputChips({setSaveIllegals}) {
         <section dir='rtl'>
             <Box sx={{display: "flex",direction:"rtl", alignItems: "center", justifyContent: "center", flexDirection:"column"}}>
                 <TextField
-                    variant="filled"
                     // in mui we can add css by sx
                     sx={{
                         direction:"rtl",
@@ -72,7 +70,6 @@ export default function InputChips({setSaveIllegals}) {
                     onChange={handleInputChange}
                     onKeyDown={handleInputKeyDown}
                 />
-
                 <Stack direction="row" spacing={2} sx={{ marginBottom:"50px" }} >
                     {chips.map((chip, index) => (
                         <Chip
